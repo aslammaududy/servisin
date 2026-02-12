@@ -36,6 +36,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('app.auth.logout');
     Route::get('confirm-password', ConfirmPassword::class)
         ->name('password.confirm');
+
+    Route::livewire('/booking', 'pages::booking.create')->name('booking.create');
 });
 
 Route::middleware(['auth', 'signed'])->group(function () {
