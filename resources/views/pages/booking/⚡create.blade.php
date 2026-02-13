@@ -5,7 +5,8 @@ use Livewire\Component;
 
 new class extends Component {
     public \App\Livewire\Forms\BookingForm $bookingForm;
-    public \Illuminate\Database\Eloquent\Collection $services;
+    public mixed $services;
+    public mixed $service;
 
     public function mount(): void
     {
@@ -14,7 +15,7 @@ new class extends Component {
 
     public function save(): void
     {
-        dd($this->services->first());
+        dd($this->service);
 //        $this->bookingForm->store();
     }
 };
@@ -25,17 +26,14 @@ new class extends Component {
         wire:submit="save"
         class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
     >
-        <x-ui.autocomplete
-            label="Search Products"
-            wire:model="services"
-            placeholder="Find products..."
-            description="Search through our product catalog"
+        <x-ui.select
+            wire:model="service"
         >
             @foreach($services as $item)
-                <x-ui.autocomplete.item>{{ $item->name }}</x-ui.autocomplete.item>
+                <x-ui.select.option value="$item->id">{{ $item->name }}</x-ui.select.option>
             @endforeach
 
-        </x-ui.autocomplete>
+        </x-ui.select>
 
 {{--        <x-ui.field>--}}
 {{--            <x-ui.label>name</x-ui.label>--}}
