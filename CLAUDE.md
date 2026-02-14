@@ -1,3 +1,41 @@
+# Servisin — Project-Specific Guidelines
+
+## About This Project
+
+Servisin is a service booking application (Indonesian language UI). Users can book repair/maintenance services (AC, kulkas, mesin cuci, etc.), select a damage type, upload photos, and track their booking status.
+
+- Primary language for UI text and validation messages: **Bahasa Indonesia**
+- Primary language for code (variables, methods, comments): **English**
+
+## UI Components — Sheaf UI
+
+This project uses [Sheaf UI](https://sheafui.dev) as its component library (managed via `sheaf.json`).
+Components live in `resources/views/components/ui/` and are used as `<x-ui.{component}>`.
+
+Installed components: icon, button, avatar, dropdown, input, select, textarea, autocomplete, toast, card, field, fieldset, label, error, text, heading, separator, link, popup, theme-switcher, description.
+
+- Before creating any custom UI component, check if Sheaf UI offers it: `php artisan sheaf:list`
+- To install a missing component: `php artisan sheaf:install {name}` (requires user approval)
+- Never manually create a component that duplicates Sheaf UI functionality.
+- Installed components are tracked in `sheaf.json`. Always check there first.
+- Sheaf UI gives you **100% ownership** of the code — modifying installed components is expected when needed to fix bugs or adapt behavior (e.g., the `String()` coercion fix in the select component for Livewire `$entangle` compatibility).
+- The select component dispatches Alpine `change` events with `$event.detail.value`.
+- Select option values from DOM are always strings — use `String()` coercion when comparing with PHP integer values round-tripped through Livewire `$entangle`.
+
+## Toast Notifications
+
+- **Inside Livewire components:** Use the `HasToast` trait (`App\Livewire\Concerns\HasToast`) and call `$this->toastSuccess('message')`, `$this->toastWarning()`, `$this->toastError()`, or `$this->toastInfo()`.
+- **Outside Livewire (Controllers, Actions):** Use `App\Support\Toast::success('message')` which flashes to session.
+
+## Volt Single-File Components
+
+- Page components use Volt SFCs with the `⚡` prefix: `resources/views/pages/{module}/⚡{name}.blade.php`
+- Tests for Volt pages live alongside them: `resources/views/pages/{module}/⚡{name}.test.php`
+- Register Volt routes using `Route::livewire()` in `routes/web.php`
+- Test Volt components with: `Livewire::test('pages::{module}.{name}')`
+
+---
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
