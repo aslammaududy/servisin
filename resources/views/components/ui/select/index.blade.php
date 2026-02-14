@@ -127,9 +127,9 @@
                 const itemIndex = this.state.findIndex(item => String(item) === String(option));
                 
                 if (itemIndex === -1) {
-                    this.state.push(option);    // Add to selection
+                    this.state = [...this.state, option];
                 } else {
-                    this.state.splice(itemIndex, 1);  // Remove from selection
+                    this.state = this.state.filter((_, i) => i !== itemIndex);
                 }
             },
 

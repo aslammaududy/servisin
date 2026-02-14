@@ -27,11 +27,11 @@ new class extends Component {
     #[\Livewire\Attributes\Computed]
     public function damageTypes()
     {
-        if (! $this->bookingForm->service_id) {
+        if (empty($this->bookingForm->service_ids)) {
             return collect();
         }
 
-        return \App\Models\DamageType::where('service_id', $this->bookingForm->service_id)->get();
+        return \App\Models\DamageType::whereIn('service_id', $this->bookingForm->service_ids)->get();
     }
 
     public function save(): void
@@ -48,17 +48,21 @@ new class extends Component {
 };
 ?>
 
-<div>
+<div class="mt-8 lg:grid lg:grid-cols-5 lg:gap-8">
     <form
         wire:submit="save"
-        class="mt-8 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
+        class="lg:col-span-3 space-y-4 rounded-lg bg-white p-6 dark:bg-neutral-800/10"
     >
+        <x-ui.heading level="h2" size="md">Buat Booking Baru</x-ui.heading>
+
         <x-ui.field>
             <x-ui.label>Layanan</x-ui.label>
             <x-ui.select
-                wire:model.live="bookingForm.service_id"
+                wire:model.live="bookingForm.service_ids"
                 searchable="true"
                 placeholder="Pilih Layanan"
+                multiple
+                clearable
             >
                 @foreach($services as $item)
                     <x-ui.select.option value="{{$item->id}}">{{ $item->name }}</x-ui.select.option>
@@ -72,16 +76,18 @@ new class extends Component {
             <x-ui.label>Jenis Kerusakan</x-ui.label>
             <x-ui.description>Pilih Layanan terlebih dahulu</x-ui.description>
             <x-ui.select
-                wire:model="bookingForm.damage_type_id"
+                wire:model="bookingForm.damage_type_ids"
                 wire:key="damage-types-{{ $this->bookingForm->service_id ?? 'none' }}"
                 searchable="true"
                 placeholder="Pilih Jenis Kerusakan"
+                multiple
+                clearable
             >
                 @foreach($this->damageTypes as $item)
                     <x-ui.select.option value="{{$item->id}}">{{ $item->name }}</x-ui.select.option>
                 @endforeach
             </x-ui.select>
-            <x-ui.error name="bookingForm.damage_type_id"/>
+            <x-ui.error name="bookingForm.damage_type_ids"/>
         </x-ui.field>
 
         <x-ui.field>
@@ -111,20 +117,22 @@ new class extends Component {
             <x-ui.error name="bookingForm.photo"/>
         </x-ui.field>
 
-        <x-ui.button
-            type="submit"
-            color="blue"
-        >
-            Kirim Booking
-        </x-ui.button>
+        <div class="flex gap-3 pt-2">
+            <x-ui.button
+                type="submit"
+                color="blue"
+            >
+                Kirim Booking
+            </x-ui.button>
 
-        <x-ui.button
-            type="button"
-            href="{{ url('/') }}"
-        >
-            Batal
-        </x-ui.button>
+            <x-ui.button
+                type="button"
+                href="{{ url('/') }}"
+            >
+                Batal
+            </x-ui.button>
+        </div>
     </form>
 
-
+    @include('pages.booking.parts.info')
 </div>

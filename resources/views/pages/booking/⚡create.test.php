@@ -7,18 +7,18 @@ it('renders successfully', function () {
         ->assertStatus(200);
 });
 
-it('service_id, damage_type_id, booking_date, and address are required', function () {
+it('service_ids, damage_type_ids, booking_date, and address are required', function () {
     Livewire::test('pages::booking.create')
         ->set([
-            'bookingForm.service_id' => '',
-            'bookingForm.damage_type_id' => '',
+            'bookingForm.service_ids' => [],
+            'bookingForm.damage_type_ids' => [],
             'bookingForm.booking_date' => '',
             'bookingForm.address' => '',
         ])
         ->call('save')
         ->assertHasErrors([
-            'bookingForm.service_id',
-            'bookingForm.damage_type_id',
+            'bookingForm.service_ids',
+            'bookingForm.damage_type_ids',
             'bookingForm.booking_date',
             'bookingForm.address',
         ]);
@@ -28,8 +28,8 @@ it('notes and foto are optional', function () {
     Livewire::test('pages::booking.create')
         ->set([
             'bookingForm.user_id' => 1,
-            'bookingForm.service_id' => 1,
-            'bookingForm.damage_type_id' => 2,
+            'bookingForm.service_ids' => [1],
+            'bookingForm.damage_type_ids' => [2],
             'bookingForm.booking_date' => date('Y-m-d'),
             'bookingForm.address' => 'jalan jalan',
         ])->call('save')
@@ -40,8 +40,8 @@ it('booking date can be save as datetime', function () {
     Livewire::test('pages::booking.create')
         ->set([
             'bookingForm.user_id' => 1,
-            'bookingForm.service_id' => 1,
-            'bookingForm.damage_type_id' => 2,
+            'bookingForm.service_ids' => [1],
+            'bookingForm.damage_type_ids' => [2],
             'bookingForm.booking_date' => date('Y-m-d H:i:s'),
             'bookingForm.address' => 'jalan jalan',
         ])->call('save')
@@ -58,7 +58,7 @@ it('booking date can be save as datetime', function () {
 | STEP 1: Set up the data (Arrange)
 |   - Create real records that the form depends on (User, Service, DamageType)
 |   - Why? Because store() inserts into bookings, booking_items, etc.
-|     Those tables have columns like user_id, service_id, damage_type_id
+|     Those tables have columns like user_id, damage_type_id
 |     that reference these records.
 |
 | STEP 2: Fill the form and submit (Act)
@@ -89,7 +89,7 @@ it('saves booking to database with valid data', function () {
     ]);
 
     // Create a damage type linked to the service above
-    // This is the "Jenis Kerusakan" dropdown (filtered by service_id)
+    // This is the "Jenis Kerusakan" dropdown (filtered by service_ids)
     $damageType = \App\Models\DamageType::create([
         'service_id' => $service->id,
         'name' => 'AC Tidak Dingin',
@@ -106,8 +106,8 @@ it('saves booking to database with valid data', function () {
         ->test('pages::booking.create')
         ->set([
             // We don't set user_id here — mount() sets it from auth()->id()
-            'bookingForm.service_id' => $service->id,
-            'bookingForm.damage_type_id' => $damageType->id,
+            'bookingForm.service_ids' => [$service->id],
+            'bookingForm.damage_type_ids' => [$damageType->id],
             'bookingForm.booking_date' => '2026-03-15 10:00:00',
             'bookingForm.address' => 'Jl. Merdeka No. 123, Jakarta',
             'bookingForm.notes' => 'AC di ruang tamu lantai 2',
@@ -132,10 +132,7 @@ it('saves booking to database with valid data', function () {
 
     // Check the booking_items table has the service + damage type
     $this->assertDatabaseHas('booking_items', [
-        'service_id' => $service->id,
         'damage_type_id' => $damageType->id,
-        'price' => 200000,   // hardcoded in BookingForm::store()
-        'quantity' => 1,
     ]);
 
     // Verify booking_date was saved (we check via the model instead of

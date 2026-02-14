@@ -5,6 +5,7 @@ namespace App\Livewire\Forms;
 use App\Models\Booking;
 use App\Models\BookingItem;
 use App\Models\BookingPhoto;
+use App\Models\DamageType;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
@@ -29,10 +30,10 @@ class BookingForm extends Form
     public $notes = '';
 
     #[Validate('required', message: 'Jenis layanan wajib dipilih')]
-    public  $service_id = null;
+    public $service_ids = [];
 
     #[Validate('required', message: 'Jenis kerusakan wajib dipilih')]
-    public  $damage_type_id = null;
+    public $damage_type_ids = [];
 
     #[Validate('nullable')]
     #[Validate('image', message: 'File harus berformat gambar (.jpg, .png, dll)')]
@@ -51,13 +52,14 @@ class BookingForm extends Form
             'notes' => $this->notes,
         ]);
 
-        BookingItem::create([
-            'booking_id' => $booking->id,
-            'service_id' => $this->service_id,
-            'damage_type_id' => $this->damage_type_id,
-            'price' => 200000,
-            'quantity' => 1,
-        ]);
+        $damage_types = DamageType::whereIn('id', $this->service_ids)->get();
+
+        foreach ($damage_types as $damage_type) {
+            BookingItem::create([
+                'booking_id' => $booking->id,
+                'damage_type_id' => $damage_type->id,
+            ]);
+        }
 
         if ($this->photo) {
             $file_name = $this->photo->getClientOriginalName();
