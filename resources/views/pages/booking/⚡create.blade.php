@@ -86,7 +86,7 @@ new class extends Component {
 
         <x-ui.field>
             <x-ui.label>Jadwal Kunjungan</x-ui.label>
-            <x-ui.input wire:model="bookingForm.booking_date" type="date"/>
+            <x-ui.input wire:model="bookingForm.booking_date" min="{{ \Carbon\Carbon::today()->addDay() }}" type="datetime-local"/>
             <x-ui.error name="bookingForm.booking_date"/>
         </x-ui.field>
 
