@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('password.confirm');
 
     Route::livewire('/booking', 'pages::booking.create')->name('booking.create');
+    Route::livewire('/booking/{booking}', 'pages::booking.detail')->name('booking.detail');
 });
 
 Route::middleware(['auth', 'signed'])->group(function () {

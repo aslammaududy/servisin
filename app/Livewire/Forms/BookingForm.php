@@ -40,7 +40,7 @@ class BookingForm extends Form
     #[Validate('max:1024', message: 'File harus berukuran maksimal 1 mb')]
     public $photo;
 
-    public function store(): void
+    public function store(): Booking
     {
         $this->validate();
 
@@ -71,5 +71,7 @@ class BookingForm extends Form
                 'original_name' => $file_name,
             ]);
         }
+
+        return $booking;
     }
 }

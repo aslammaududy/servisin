@@ -36,14 +36,14 @@ new class extends Component {
 
     public function save(): void
     {
-        $this->bookingForm->store();
+        $booking = $this->bookingForm->store();
 
         session()->flash('notify', [
             'content' => 'Booking berhasil dibuat!',
             'type' => 'success'
         ]);
 
-        $this->redirect('/dashboard');
+        $this->redirectRoute('booking.detail', compact('booking'));
     }
 };
 ?>
@@ -92,7 +92,8 @@ new class extends Component {
 
         <x-ui.field>
             <x-ui.label>Jadwal Kunjungan</x-ui.label>
-            <x-ui.input wire:model="bookingForm.booking_date" min="{{ \Carbon\Carbon::today()->addDay() }}" type="datetime-local"/>
+            <x-ui.input wire:model="bookingForm.booking_date" min="{{ \Carbon\Carbon::today()->addDay() }}"
+                        type="datetime-local"/>
             <x-ui.error name="bookingForm.booking_date"/>
         </x-ui.field>
 

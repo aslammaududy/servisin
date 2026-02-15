@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
@@ -23,6 +24,11 @@ class Booking extends Model
     public function technician()
     {
         return $this->belongsTo(User::class, 'technician_id')->where('role', 'technician');
+    }
+
+    public function bookingItems(): HasMany
+    {
+        return $this->hasMany(BookingItem::class, 'booking_id');
     }
 
     protected function casts()

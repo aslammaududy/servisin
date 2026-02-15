@@ -19,11 +19,6 @@ class BookingItem extends Model
         return $this->belongsTo(Booking::class);
     }
 
-    public function service()
-    {
-        return $this->belongsTo(Service::class);
-    }
-
     public function damageType()
     {
         return $this->belongsTo(DamageType::class);
