@@ -88,12 +88,34 @@ it('saves booking to database with valid data', function () {
         'is_active' => true,
     ]);
 
-    // Create a damage type linked to the service above
+    $service_tv = \App\Models\Service::create([
+        'name' => 'Servis TV',
+        'description' => 'Perbaikan dan perawatan TV',
+        'is_active' => true,
+    ]);
+
+    // Create some damage types linked to the service above
     // This is the "Jenis Kerusakan" dropdown (filtered by service_ids)
-    $damageType = \App\Models\DamageType::create([
+    $damageTypes[] = \App\Models\DamageType::create([
         'service_id' => $service->id,
         'name' => 'AC Tidak Dingin',
         'description' => 'AC menyala tapi tidak mengeluarkan udara dingin',
+        'price' => 150000,
+        'is_active' => true,
+    ]);
+
+    $damageTypes[] = \App\Models\DamageType::create([
+        'service_id' => $service->id,
+        'name' => 'AC Tidak Dingin',
+        'description' => 'AC menyala tapi tidak mengeluarkan udara dingin',
+        'price' => 150000,
+        'is_active' => true,
+    ]);
+
+    $damage_type_tv = \App\Models\DamageType::create([
+        'service_id' => $service_tv->id,
+        'name' => fake()->name(),
+        'description' => fake()->text(),
         'price' => 150000,
         'is_active' => true,
     ]);
@@ -106,8 +128,8 @@ it('saves booking to database with valid data', function () {
         ->test('pages::booking.create')
         ->set([
             // We don't set user_id here — mount() sets it from auth()->id()
-            'bookingForm.service_ids' => [$service->id],
-            'bookingForm.damage_type_ids' => [$damageType->id],
+            'bookingForm.service_ids' => [$service->id, $service_tv->id],
+            'bookingForm.damage_type_ids' => [Arr::pluck($damageTypes, 'id'), $damage_type_tv->id],
             'bookingForm.booking_date' => '2026-03-15 10:00:00',
             'bookingForm.address' => 'Jl. Merdeka No. 123, Jakarta',
             'bookingForm.notes' => 'AC di ruang tamu lantai 2',
@@ -130,10 +152,13 @@ it('saves booking to database with valid data', function () {
         'notes' => 'AC di ruang tamu lantai 2',
     ]);
 
-    // Check the booking_items table has the service + damage type
-    $this->assertDatabaseHas('booking_items', [
-        'damage_type_id' => $damageType->id,
-    ]);
+//    // Check the booking_items table has the damage type
+//    $this->assertDatabaseHas('booking_items', [
+//        'damage_type_id' => $damageType->id,
+//    ]);
+
+    //because damage_type_ids is an array it can have more than 1 entries
+    $this->assertDatabaseCount('booking_items', 3);
 
     // Verify booking_date was saved (we check via the model instead of
     // assertDatabaseHas because the 'timestamp' cast stores it as a Unix integer)

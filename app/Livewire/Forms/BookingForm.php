@@ -52,7 +52,7 @@ class BookingForm extends Form
             'notes' => $this->notes,
         ]);
 
-        $damage_types = DamageType::whereIn('id', $this->service_ids)->get();
+        $damage_types = DamageType::whereIn('service_id', $this->service_ids)->get();
 
         foreach ($damage_types as $damage_type) {
             BookingItem::create([
