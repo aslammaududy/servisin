@@ -50,10 +50,10 @@
                 <x-user-dropdown/>
             @endauth
 
-            <x-ui.separator
-                class="my-2"
-                vertical
-            />
+{{--            <x-ui.separator--}}
+{{--                class="my-2"--}}
+{{--                vertical--}}
+{{--            />--}}
 
 {{--            <x-ui.theme-switcher variant="inline"/>--}}
         </div>

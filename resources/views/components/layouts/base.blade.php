@@ -24,21 +24,24 @@
 </head>
     <script>
         // this is script is essentiel to prevent page's flicker at render time
-        const loadDarkMode = () => {
-            const theme = localStorage.getItem('theme') ?? 'system'
+        // const loadDarkMode = () => {
+        //     const theme = localStorage.getItem('theme') ?? 'system'
+        //
+        //     if (
+        //         theme === 'dark' ||
+        //         (theme === 'system' &&
+        //             window.matchMedia('(prefers-color-scheme: dark)')
+        //             .matches)
+        //     ) {
+        //         document.documentElement.classList.add('dark')
+        //     }
+        // }
+        // loadDarkMode();
+        document.documentElement.classList.remove('dark')
 
-            if (
-                theme === 'dark' ||
-                (theme === 'system' &&
-                    window.matchMedia('(prefers-color-scheme: dark)')
-                    .matches)
-            ) {
-                document.documentElement.classList.add('dark')
-            }
-        }
-        loadDarkMode();
         document.addEventListener('livewire:navigated', function() {
-            loadDarkMode();
+            // loadDarkMode();
+            document.documentElement.classList.remove('dark')
         });
     </script>
 
@@ -50,7 +53,9 @@
         @fluxScripts
         {{-- without this it cause flicker when multiple components changes in isolation in the  page --}}
         <script>
-            loadDarkMode()
+            // loadDarkMode()
+            document.documentElement.classList.remove('dark')
+
         </script>
         <x-ui.toast :maxToasts="1" />
     </body>
