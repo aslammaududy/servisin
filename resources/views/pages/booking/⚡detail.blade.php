@@ -12,18 +12,6 @@ new class extends Component {
     }
 
     #[\Livewire\Attributes\Computed]
-    public function status(): string
-    {
-        return match ($this->booking->status) {
-            'pending' => 'Menunggu',
-            'assigned' => 'Teknisi Ditugaskan',
-            'on_progress' => 'Sedang Dikerjakan',
-            'done' => 'Selesai',
-            'cancelled' => 'Batal'
-        };
-    }
-
-    #[\Livewire\Attributes\Computed]
     public function estimatedTotal(): int
     {
         return $this->booking->bookingItems->reduce(function (?int $carry, \App\Models\BookingItem $item) {
@@ -60,7 +48,7 @@ new class extends Component {
                     Status
                 </x-ui.text>
                 <x-ui.heading level="h3" size="lg" class="text-orange-600">
-                    {{ $this->status }}
+                    {{ $booking->status }}
                 </x-ui.heading>
                 <x-ui.text size="xs" class="text-gray-400">
                     Update {{ Carbon\Carbon::now()->format('d M Y H:i') }}
@@ -134,7 +122,7 @@ new class extends Component {
                 <div class="flex justify-between items-start">
                     <x-ui.text size="sm" class="text-gray-600">Status</x-ui.text>
                     <x-ui.text size="sm" class="font-medium text-orange-600 text-right">
-                        {{ $this->status }}
+                        {{ $booking->status }}
                     </x-ui.text>
                 </div>
 
@@ -186,7 +174,7 @@ new class extends Component {
             </x-ui.heading>
 
             <x-ui.text size="sm" class="text-gray-500">
-                @if($booking->status == 'assigned')
+                @if($booking->status == 'Teknisi Ditugaskan')
                     {{ $booking->technician->name }}
                 @else
                     Belum Ditugaskan
@@ -231,7 +219,7 @@ new class extends Component {
                         </x-ui.text>
                     </div>
                     <x-ui.text size="sm" class="font-medium">
-                        Status: {{ $this->status }}
+                        Status: {{ $booking->status }}
                     </x-ui.text>
                     @if($event->status == 'assigned')
                         <x-ui.text size="sm" class="font-medium">

@@ -25,7 +25,7 @@ Route::get('/forgot-password', ForgotPassword::class)->name('forgot-password');
 Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::livewire('/dashboard', 'pages::dashboard')->name('dashboard');
     Route::get('/settings/account', Account::class)->name('settings.account');
 });
 
