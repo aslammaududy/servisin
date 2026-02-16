@@ -1,5 +1,6 @@
-@import './theme.css'; /* By Sheaf.dev */ 
+@import './theme.css'; /* By Sheaf.dev */
 @import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -12,4 +13,4 @@
 }
 
 
- @custom-variant dark (&:where(.dark, .dark *)); /* By Sheaf.dev */ 
+ @custom-variant dark (&:where(.dark, .dark *)); /* By Sheaf.dev */
