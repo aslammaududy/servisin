@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Observers\BookingObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[ObservedBy([BookingObserver::class])]
 class Booking extends Model
 {
     protected $fillable = [
@@ -29,6 +32,11 @@ class Booking extends Model
     public function bookingItems(): HasMany
     {
         return $this->hasMany(BookingItem::class, 'booking_id');
+    }
+
+    public function bookingEvents(): HasMany
+    {
+        return $this->hasMany(BookingEvent::class, 'booking_id');
     }
 
     protected function casts()

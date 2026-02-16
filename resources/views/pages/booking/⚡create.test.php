@@ -2,7 +2,7 @@
 
 use Livewire\Livewire;
 
-it('renders successfully', function () {
+it('booking page renders successfully', function () {
     Livewire::test('pages::booking.create')
         ->assertStatus(200);
 });
@@ -25,9 +25,11 @@ it('service_ids, damage_type_ids, booking_date, and address are required', funct
 });
 
 it('notes and foto are optional', function () {
-    Livewire::test('pages::booking.create')
+    $user = \App\Models\User::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test('pages::booking.create')
         ->set([
-            'bookingForm.user_id' => 1,
             'bookingForm.service_ids' => [1],
             'bookingForm.damage_type_ids' => [2],
             'bookingForm.booking_date' => date('Y-m-d'),
@@ -37,9 +39,11 @@ it('notes and foto are optional', function () {
 });
 
 it('booking date can be save as datetime', function () {
-    Livewire::test('pages::booking.create')
+    $user = \App\Models\User::factory()->create();
+
+    Livewire::actingAs($user)
+        ->test('pages::booking.create')
         ->set([
-            'bookingForm.user_id' => 1,
             'bookingForm.service_ids' => [1],
             'bookingForm.damage_type_ids' => [2],
             'bookingForm.booking_date' => date('Y-m-d H:i:s'),
@@ -124,7 +128,7 @@ it('saves booking to database with valid data', function () {
 
     // actingAs() simulates being logged in as $user
     // This is important because mount() sets bookingForm.user_id = auth()->id()
-    Livewire::actingAs($user)
+    $booking_page = Livewire::actingAs($user)
         ->test('pages::booking.create')
         ->set([
             // We don't set user_id here — mount() sets it from auth()->id()
@@ -134,9 +138,12 @@ it('saves booking to database with valid data', function () {
             'bookingForm.address' => 'Jl. Merdeka No. 123, Jakarta',
             'bookingForm.notes' => 'AC di ruang tamu lantai 2',
         ])
-        ->call('save')
-        ->assertHasNoErrors()            // Make sure no validation errors
-        ->assertRedirect('/dashboard');  // Verify it redirects after saving
+        ->call('save');
+
+    $booking = \App\Models\Booking::first();
+
+    $booking_page->assertHasNoErrors()            // Make sure no validation errors
+    ->assertRedirectToRoute('booking.detail', compact('booking'));  // Verify it redirects after saving
 
     // ===== STEP 3: ASSERT — check the database =====
 
@@ -166,4 +173,8 @@ it('saves booking to database with valid data', function () {
 
     // We didn't upload a photo, so booking_photos should be empty
     $this->assertDatabaseCount('booking_photos', 0);
+
+    $this->assertDatabaseHas('booking_events', [
+        'changed_by' => $user->id,
+    ]);
 });

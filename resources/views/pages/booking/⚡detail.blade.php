@@ -8,7 +8,7 @@ new class extends Component {
 
     public function mount(Booking $booking): void
     {
-        $this->booking = $booking->load(['bookingItems.damageType.service', 'user', 'technician']);
+        $this->booking = $booking->load(['bookingItems.damageType.service', 'user', 'technician', 'bookingEvents']);
     }
 
     #[\Livewire\Attributes\Computed]
@@ -207,6 +207,42 @@ new class extends Component {
             <x-ui.text size="sm" class="text-gray-700 leading-relaxed">
                 {{ $booking->notes ?? 'Tidak ada catatan' }}
             </x-ui.text>
+        </x-ui.card>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4">
+        <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+            <x-ui.heading level="h3" size="md" class="mb-4">
+                Timeline
+            </x-ui.heading>
+
+            <div class="space-y-4">
+                @foreach($booking->bookingEvents as $event)
+                    <div class="flex justify-between items-start">
+                        <x-ui.text size="sm" class="text-gray-600">
+                            @if($event->status === 'created')
+                                <x-ui.badge>
+                                    Booking dibuat
+                                </x-ui.badge>
+                            @endif
+                        </x-ui.text>
+                        <x-ui.text size="sm" class="font-medium text-right">
+                            {{ $event->created_at->format('d M Y H:i') }}
+                        </x-ui.text>
+                    </div>
+                    <x-ui.text size="sm" class="font-medium">
+                        Status: {{ $this->status }}
+                    </x-ui.text>
+                    @if($event->status == 'assigned')
+                        <x-ui.text size="sm" class="font-medium">
+                            Teknisi: {{ $booking->technician->name }}
+                        </x-ui.text>
+                        <x-ui.text size="sm" class="font-medium">
+                            Penugasan: Round Robin
+                        </x-ui.text>
+                    @endif
+                @endforeach
+            </div>
         </x-ui.card>
     </div>
 </div>

@@ -13,7 +13,6 @@ return new class extends Migration {
             $table->string('from_status');
             $table->string('to_status');
             $table->unsignedBigInteger('changed_by');
-            $table->text('note');
             $table->timestamps();
         });
     }

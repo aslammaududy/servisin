@@ -62,6 +62,9 @@
         },
         "description": {
             "installationTime": 1771048147
+        },
+        "badge": {
+            "installationTime": 1771202425
         }
     },
     "project_hash": "fc90da10-90cc-4e20-bebd-5f6255f30f4c"

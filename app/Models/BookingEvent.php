@@ -8,8 +8,7 @@ class BookingEvent extends Model
 {
     protected $fillable = [
         'booking_id',
-        'from_status',
-        'to_status',
+        'status',
         'changed_by',
         'note',
     ];
