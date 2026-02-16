@@ -101,14 +101,16 @@ new class extends Component {
                                     {{ Carbon\Carbon::createFromTimestamp($item->booking->booking_date)->format('d M Y') }}
                                 </flux:table.cell>
                                 <flux:table.cell variant="strong">{{ $item->booking->user->name }}</flux:table.cell>
-                                <flux:table.cell variant="strong">{{ $item->damageType->service->name }}</flux:table.cell>
+                                <flux:table.cell
+                                    variant="strong">{{ $item->damageType->service->name }}</flux:table.cell>
                                 <flux:table.cell variant="strong">{{ $item->booking->status }}</flux:table.cell>
-                                <flux:table.cell variant="strong">{{ $item->booking->technician?->name }}</flux:table.cell>
+                                <flux:table.cell
+                                    variant="strong">{{ $item->booking->technician->name ?? 'Belum ada' }}</flux:table.cell>
                                 <flux:table.cell variant="strong">
-                                    <a href="{{ route('booking.detail',['booking' => $item->booking]) }}"
-                                       target="_blank">
+                                    <x-ui.link :primary="true" class="text-blue-600" variant="ghost" href="{{ route('booking.detail',['booking' => $item->booking]) }}"
+                                               target="_blank">
                                         Detail
-                                    </a>
+                                    </x-ui.link>
                                 </flux:table.cell>
                             </flux:table.row>
                         </flux:table.rows>
