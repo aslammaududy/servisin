@@ -1,32 +1,10 @@
-<?php
-
-use App\Models\Booking;
-use Livewire\Component;
-
-new class extends Component {
-    public Booking $booking;
-
-    public function mount(Booking $booking): void
-    {
-        $this->booking = $booking->load(['bookingItems.damageType.service', 'user', 'technician', 'bookingEvents']);
-    }
-
-    #[\Livewire\Attributes\Computed]
-    public function estimatedTotal(): int
-    {
-        return $this->booking->bookingItems->reduce(function (?int $carry, \App\Models\BookingItem $item) {
-            return $carry + $item->damageType->price;
-        }, 0);
-    }
-};
-?>
-
 <div class="space-y-6">
 
     {{-- ========================= --}}
     {{-- ROW 1 : 4 SUMMARY CARDS --}}
     {{-- ========================= --}}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div
+        class="grid grid-cols-1 sm:grid-cols-2 {{ auth()->user()->role === 'user' ? 'lg:grid-cols-4' : 'lg:grid-cols-3' }} gap-4">
 
         <x-ui.card size="lg">
             <div class="space-y-1">
@@ -70,20 +48,21 @@ new class extends Component {
             </div>
         </x-ui.card>
 
-        <x-ui.card size="lg">
-            <div class="space-y-1">
-                <x-ui.text size="sm" class="text-gray-500 uppercase tracking-wide">
-                    Total Estimasi
-                </x-ui.text>
-                <x-ui.heading level="h3" size="lg">
-                    Rp {{ number_format($this->estimatedTotal, 0, ',', '.') }}
-                </x-ui.heading>
-                <x-ui.text size="xs" class="text-gray-400">
-                    Termasuk ongkir
-                </x-ui.text>
-            </div>
-        </x-ui.card>
-
+        @if(auth()->user()->role === 'user')
+            <x-ui.card size="lg">
+                <div class="space-y-1">
+                    <x-ui.text size="sm" class="text-gray-500 uppercase tracking-wide">
+                        Total Estimasi
+                    </x-ui.text>
+                    <x-ui.heading level="h3" size="lg">
+                        Rp {{ number_format($this->estimatedTotal, 0, ',', '.') }}
+                    </x-ui.heading>
+                    <x-ui.text size="xs" class="text-gray-400">
+                        Termasuk ongkir
+                    </x-ui.text>
+                </div>
+            </x-ui.card>
+        @endif
     </div>
 
 
@@ -101,14 +80,14 @@ new class extends Component {
                 <div class="flex justify-between items-start">
                     <x-ui.text size="sm" class="text-gray-600">Layanan</x-ui.text>
                     <x-ui.text size="sm" class="font-medium text-right">
-                        {{ $booking->service }}
+                        {{ $this->services }}
                     </x-ui.text>
                 </div>
 
                 <div class="flex justify-between items-start">
-                    <x-ui.text size="sm" class="text-gray-600">Kerusakan</x-ui.text>
+                    <x-ui.text size="sm" class="text-gray-600 mr-2">Kerusakan</x-ui.text>
                     <x-ui.text size="sm" class="font-medium text-right">
-                        Mati total
+                        {{ $this->damages }}
                     </x-ui.text>
                 </div>
 
@@ -173,13 +152,26 @@ new class extends Component {
                 Teknisi
             </x-ui.heading>
 
-            <x-ui.text size="sm" class="text-gray-500">
-                @if($booking->status == 'Teknisi Ditugaskan')
-                    {{ $booking->technician->name }}
-                @else
-                    Belum Ditugaskan
-                @endif
-            </x-ui.text>
+            @if(auth()->user()->role === 'admin')
+                <x-ui.select
+                    wire:model.live="technician_id"
+                    placeholder="Pilih Teknisi"
+                    clearable
+                >
+                    @foreach($this->technicians as $technician)
+                        <x-ui.select.option value="{{$technician->id}}">{{ $technician->name }}</x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+            @endif
+            @if(auth()->user()->role === 'user')
+                <x-ui.text size="sm" class="text-gray-500">
+                    @if($booking->status == 'Teknisi Ditugaskan')
+                        {{ $booking->technician->name }}
+                    @else
+                        Belum Ditugaskan
+                    @endif
+                </x-ui.text>
+            @endif
         </x-ui.card>
     </div>
 
@@ -198,6 +190,26 @@ new class extends Component {
         </x-ui.card>
     </div>
 
+    @if(auth()->user()->role === 'admin')
+        <div class="grid grid-cols-1 gap-4">
+            <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+                <x-ui.heading level="h3" size="md" class="mb-4">
+                    Update Status
+                </x-ui.heading>
+
+                <x-ui.select
+                    wire:model.live="booking_status"
+                    placeholder="Pilih Status"
+                    clearable
+                >
+                    @foreach($statuses as $status)
+                        <x-ui.select.option value="{{$status}}" >{{ $status }}</x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+            </x-ui.card>
+        </div>
+    @endif
+
     <div class="grid grid-cols-1 gap-4">
         <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
             <x-ui.heading level="h3" size="md" class="mb-4">
@@ -206,29 +218,35 @@ new class extends Component {
 
             <div class="space-y-4">
                 @foreach($booking->bookingEvents as $event)
-                    <div class="flex justify-between items-start">
-                        <x-ui.text size="sm" class="text-gray-600">
-                            @if($event->status === 'created')
-                                <x-ui.badge>
-                                    Booking dibuat
-                                </x-ui.badge>
-                            @endif
+                    <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+                        <div class="flex justify-between items-start">
+                            <x-ui.text size="sm" class="text-gray-600">
+                                @if($event->status === 'created')
+                                    <x-ui.badge color="sky">
+                                        Booking dibuat
+                                    </x-ui.badge>
+                                    @else
+                                    <x-ui.badge color="sky">
+                                        {{ $event->status }}
+                                    </x-ui.badge>
+                                @endif
+                            </x-ui.text>
+                            <x-ui.text size="sm" class="font-medium text-right">
+                                {{ $event->created_at->format('d M Y H:i') }}
+                            </x-ui.text>
+                        </div>
+                        <x-ui.text size="sm" class="font-medium mt-2">
+                            Oleh: {{ $event->changedBy->role }}
                         </x-ui.text>
-                        <x-ui.text size="sm" class="font-medium text-right">
-                            {{ $event->created_at->format('d M Y H:i') }}
-                        </x-ui.text>
-                    </div>
-                    <x-ui.text size="sm" class="font-medium">
-                        Status: {{ $booking->status }}
-                    </x-ui.text>
-                    @if($event->status == 'assigned')
-                        <x-ui.text size="sm" class="font-medium">
-                            Teknisi: {{ $booking->technician->name }}
-                        </x-ui.text>
-                        <x-ui.text size="sm" class="font-medium">
-                            Penugasan: Round Robin
-                        </x-ui.text>
-                    @endif
+                        @if($event->status == 'Teknisi Ditugaskan')
+                            <x-ui.text size="sm" class="font-medium mt-2">
+                                Teknisi: {{ $booking->technician?->name }}
+                            </x-ui.text>
+                            <x-ui.text size="sm" class="font-medium mt-2">
+                                Penugasan: Round Robin
+                            </x-ui.text>
+                        @endif
+                    </x-ui.card>
                 @endforeach
             </div>
         </x-ui.card>

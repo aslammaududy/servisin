@@ -57,6 +57,13 @@ class Booking extends Model
                 'done' => 'Selesai',
                 'cancelled' => 'Batal'
             },
+            set: fn($value) => match ($value) {
+                'Menunggu' => 'pending',
+                'Teknisi Ditugaskan' => 'assigned',
+                'Sedang Dikerjakan' => 'on_progress',
+                'Selesai' => 'done',
+                'Dibatalkan' => 'cancelled',
+            }
         );
     }
 }
