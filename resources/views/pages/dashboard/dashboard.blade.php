@@ -1,42 +1,3 @@
-<?php
-
-use App\Models\Booking;
-use Livewire\Component;
-
-new class extends Component {
-    use \Livewire\WithPagination;
-
-
-    #[\Livewire\Attributes\Computed]
-    public function bookingItems()
-    {
-        return \App\Models\BookingItem::with(['booking.user', 'booking.technician', 'damageType.service'])
-            ->has('booking')
-            ->groupBy('booking_id')
-            ->paginate(10);
-    }
-
-    #[\Livewire\Attributes\Computed]
-    public function services(): array
-    {
-        $booking_item_ids = $this->bookingItems->pluck('booking_id');
-        $services = [];
-
-        \App\Models\Booking::with('bookingItems.damageType.service')
-            ->whereIn('id', $booking_item_ids)
-            ->get()
-            ->each(function (Booking $booking) use (&$services) {
-                return $booking->bookingItems->each(function (\App\Models\BookingItem $bookingItem) use ($booking, &$services) {
-                    $services[$booking->id][] = $bookingItem->damageType->service->name;
-                });
-            });
-
-        return $services;
-    }
-
-}
-
-?>
 <div class="space-y-6">
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -46,7 +7,7 @@ new class extends Component {
                     Total Booking
                 </x-ui.text>
                 <x-ui.heading level="h2" size="lg">
-                    2
+                    {{ $this->bookingItems->total() }}
                 </x-ui.heading>
             </div>
         </x-ui.card>
@@ -57,7 +18,7 @@ new class extends Component {
                     Booking Aktif
                 </x-ui.text>
                 <x-ui.heading level="h2" size="lg">
-                    2
+                    {{ $this->activeBookings }}
                 </x-ui.heading>
             </div>
         </x-ui.card>
@@ -68,7 +29,7 @@ new class extends Component {
                     Selesai
                 </x-ui.text>
                 <x-ui.heading level="h2" size="lg">
-                    2
+                    {{ $this->completedBookings }}
                 </x-ui.heading>
             </div>
         </x-ui.card>
@@ -79,7 +40,7 @@ new class extends Component {
                     Completion Rate
                 </x-ui.text>
                 <x-ui.heading level="h2" size="lg">
-                    2
+                    {{ $this->bookingCompletionRate }}
                 </x-ui.heading>
             </div>
         </x-ui.card>
@@ -90,7 +51,7 @@ new class extends Component {
                     Rata - Rata Selesai
                 </x-ui.text>
                 <x-ui.heading level="h2" size="lg">
-                    2
+                    {{ $this->averageCompletedBooking }}
                 </x-ui.heading>
             </div>
         </x-ui.card>
