@@ -11,7 +11,7 @@ new class extends Component {
     {
         return \App\Models\BookingItem::with(['booking.user', 'booking.technician', 'damageType.service'])
             ->has('booking')
-            ->groupBy('service_id')
+            ->groupBy('booking_id')
             ->paginate(10);
     }
 
