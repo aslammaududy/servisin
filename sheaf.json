@@ -65,6 +65,9 @@
         },
         "badge": {
             "installationTime": 1771202425
+        },
+        "checkbox": {
+            "installationTime": 1771497888
         }
     },
     "project_hash": "fc90da10-90cc-4e20-bebd-5f6255f30f4c"

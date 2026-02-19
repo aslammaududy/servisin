@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::livewire('/booking', 'pages::booking.create')->name('booking.create');
     Route::livewire('/booking/{booking}', 'pages::booking.detail')->name('booking.detail');
+    Route::livewire('/jobs', 'pages::job-list')->name('jobs.list');
 });
 
 Route::middleware(['auth', 'signed'])->group(function () {

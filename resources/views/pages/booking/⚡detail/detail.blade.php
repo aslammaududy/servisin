@@ -162,8 +162,7 @@
                         <x-ui.select.option value="{{$technician->id}}">{{ $technician->name }}</x-ui.select.option>
                     @endforeach
                 </x-ui.select>
-            @endif
-            @if(auth()->user()->role === 'user')
+            @else
                 <x-ui.text size="sm" class="text-gray-500">
                     @if($booking->status == 'Teknisi Ditugaskan')
                         {{ $booking->technician->name }}
@@ -203,7 +202,7 @@
                     clearable
                 >
                     @foreach($statuses as $status)
-                        <x-ui.select.option value="{{$status}}" >{{ $status }}</x-ui.select.option>
+                        <x-ui.select.option value="{{$status}}">{{ $status }}</x-ui.select.option>
                     @endforeach
                 </x-ui.select>
             </x-ui.card>
@@ -225,7 +224,7 @@
                                     <x-ui.badge color="sky">
                                         Booking dibuat
                                     </x-ui.badge>
-                                    @else
+                                @else
                                     <x-ui.badge color="sky">
                                         {{ $event->status }}
                                     </x-ui.badge>

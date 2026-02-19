@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone');
             $table->enum('role', ['admin', 'user', 'technician'])->default('user');
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_available_for_job')->default(false);
             $table->timestamp('last_assigned_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
