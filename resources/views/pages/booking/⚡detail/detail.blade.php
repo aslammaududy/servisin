@@ -123,9 +123,30 @@
 
                 <div class="flex justify-between items-start">
                     <x-ui.text size="sm" class="text-gray-600">Ongkir</x-ui.text>
-                    <x-ui.text size="sm" class="font-medium text-right">
-                        Rp 0
-                    </x-ui.text>
+                    @if(auth()->user()->role === 'admin')
+                        <div class="flex justify-between items-end">
+                            <x-ui.input wire:model="shipping_fee" x-mask:dynamic="$money($input)" placeholder="1000">
+                                <x-slot name="prefix">Rp</x-slot>
+                            </x-ui.input>
+                        </div>
+                    @else
+                        <x-ui.text size="sm" class="font-medium text-right">
+                            Rp {{ $booking->shipping_fee }}
+                        </x-ui.text>
+                    @endif
+                </div>
+
+                <div class="flex justify-between items-end">
+                    &nbsp;
+
+                    <x-ui.button
+                        color="blue"
+                        size="xs"
+                        type="button"
+                        wire:click="setShippingFee"
+                    >
+                        Simpan
+                    </x-ui.button>
                 </div>
 
                 <div class="flex justify-between items-start">

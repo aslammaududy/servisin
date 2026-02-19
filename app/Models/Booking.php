@@ -18,6 +18,7 @@ class Booking extends Model
         'booking_date',
         'address',
         'notes',
+        'shipping_fee',
     ];
 
     public function user()

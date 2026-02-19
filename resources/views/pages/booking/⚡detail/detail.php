@@ -11,6 +11,7 @@ new class extends Component {
     public string $search_technician = '';
     public string $booking_status = '';
     public ?int $technician_id;
+    public mixed $shipping_fee;
     public array $statuses = [
         'Menunggu',
         'Teknisi Ditugaskan',
@@ -21,17 +22,20 @@ new class extends Component {
 
     public function mount(Booking $booking): void
     {
-        $this->booking = $booking->load(['bookingItems.damageType.service', 'user', 'technician', 'bookingEvents']);
+        $this->booking = $booking->load(['bookingItems.damageType.service', 'user', 'technician', 'bookingEvents.changedBy']);
         $this->booking_status = $booking->status;
         $this->technician_id = $booking->technician_id;
+        $this->shipping_fee = $booking->shipping_fee;
     }
 
     #[\Livewire\Attributes\Computed]
     public function estimatedTotal(): int
     {
-        return $this->booking->bookingItems->reduce(function (?int $carry, \App\Models\BookingItem $item) {
+        $estimated_total = $this->booking->bookingItems->reduce(function (?int $carry, \App\Models\BookingItem $item) {
             return $carry + $item->damageType->price;
         }, 0);
+
+        return $estimated_total + $this->booking->shipping_fee;
     }
 
     #[\Livewire\Attributes\Computed]
@@ -75,5 +79,14 @@ new class extends Component {
         $this->booking->save();
 
         $this->toastSuccess('Berhasil menugaskan teknisi');
+    }
+
+    public function setShippingFee(): void
+    {
+        $this->booking->shipping_fee = (int)str_replace(",", "", $this->shipping_fee);
+        $this->booking->save();
+
+        $this->toastSuccess('Berhasil update ongkos kirim');
+
     }
 };
