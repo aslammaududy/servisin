@@ -14,6 +14,7 @@ use Livewire\Form;
 final class RegisterForm extends Form
 {
     public string $name = '';
+    public string $phone = '';
 
     public string $email = '';
 
@@ -25,10 +26,11 @@ final class RegisterForm extends Form
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'unique:'.User::class, 'min:3', 'max:255'],
+            'phone' => ['required', 'string', 'unique:'.User::class, 'min:10', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'string', 'confirmed', Password::defaults()],
         ]);
-        
+
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered($user = User::create($validated)));

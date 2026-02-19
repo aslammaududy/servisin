@@ -2,7 +2,7 @@
     Register an account
 </x-slot>
 
-<form 
+<form
     wire:submit="register"
     class="mx-auto w-full max-w-md space-y-4"
 >
@@ -14,6 +14,15 @@
                 placeholder="Enter your name"
             />
             <x-ui.error name="form.name" />
+        </x-ui.field>
+
+        <x-ui.field >
+            <x-ui.label>phone</x-ui.label>
+            <x-ui.input
+                wire:model="form.phone"
+                placeholder="Enter your phone"
+            />
+            <x-ui.error name="form.phone" />
         </x-ui.field>
 
         <x-ui.field >
@@ -56,7 +65,7 @@
         Register
     </x-ui.button>
 
-    <x-ui.link 
+    <x-ui.link
         variant="soft"
         href="{{ route('login') }}"
     >
