@@ -131,24 +131,24 @@
                         </div>
                     @else
                         <x-ui.text size="sm" class="font-medium text-right">
-                            Rp {{ $booking->shipping_fee }}
+                            Rp {{ number_format($booking->shipping_fee, 0, ',', '.') }}
                         </x-ui.text>
                     @endif
                 </div>
+                @if(auth()->user()->role === 'admin')
+                    <div class="flex justify-between items-end">
+                        &nbsp;
 
-                <div class="flex justify-between items-end">
-                    &nbsp;
-
-                    <x-ui.button
-                        color="blue"
-                        size="xs"
-                        type="button"
-                        wire:click="setShippingFee"
-                    >
-                        Simpan
-                    </x-ui.button>
-                </div>
-
+                        <x-ui.button
+                            color="blue"
+                            size="xs"
+                            type="button"
+                            wire:click="setShippingFee"
+                        >
+                            Simpan
+                        </x-ui.button>
+                    </div>
+                @endif
                 <div class="flex justify-between items-start">
                     <x-ui.text size="sm" class="text-gray-600">Alamat</x-ui.text>
 
