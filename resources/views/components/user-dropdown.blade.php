@@ -29,6 +29,9 @@
             <x-ui.dropdown.item :href="route('admin.service.index')" wire:navigate.live>
                 Kelola Layanan
             </x-ui.dropdown.item>
+            <x-ui.dropdown.item :href="route('admin.user.index')" wire:navigate.live>
+                Kelola Pengguna
+            </x-ui.dropdown.item>
         @endif
 
         <x-ui.dropdown.separator />

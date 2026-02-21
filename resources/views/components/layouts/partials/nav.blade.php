@@ -45,6 +45,13 @@
                     >
                         kelola layanan
                     </x-ui.link>
+                    <x-ui.link
+                        :href="route('admin.user.index')"
+                        :attributes="$attributes->when(Request::routeIs('admin.user.index'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
+                        variant="soft"
+                    >
+                        kelola pengguna
+                    </x-ui.link>
                 @endif
             </div>
         </div>
@@ -140,6 +147,9 @@
                                 <a href="{{ route('admin.service.index') }}"
                                    class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Kelola
                                     Layanan</a>
+                                <a href="{{ route('admin.user.index') }}"
+                                   class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Kelola
+                                    Pengguna</a>
                             @endif
                         @endauth
                     </div>
