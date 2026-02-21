@@ -1,0 +1,24 @@
+{
+    "files": [],
+    "helpers": {
+        "popup": [
+            "autocomplete",
+            "select"
+        ]
+    },
+    "internalDependencies": {
+        "icon": [
+            "input",
+            "autocomplete",
+            "select",
+            "button",
+            "badge"
+        ],
+        "text": [
+            "select"
+        ],
+        "button": [
+            "badge"
+        ]
+    }
+}
