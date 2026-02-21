@@ -12,7 +12,7 @@ use App\Livewire\Settings\Account;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
-//Route::get('/', Livewire\Home::class)->name('home');
+// Route::get('/', Livewire\Home::class)->name('home');
 Route::livewire('/', 'pages::service.index')->name('home');
 
 /** AUTH ROUTES */
@@ -27,6 +27,7 @@ Route::get('reset-password/{token}', ResetPassword::class)->name('password.reset
 Route::middleware('auth')->group(function () {
     Route::livewire('/dashboard', 'pages::dashboard')->name('dashboard');
     Route::get('/settings/account', Account::class)->name('settings.account');
+    Route::livewire('/admin/layanan', 'pages::admin.service.index')->name('admin.service.index');
 });
 
 Route::middleware(['auth'])->group(function () {

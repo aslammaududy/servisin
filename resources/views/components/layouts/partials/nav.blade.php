@@ -26,6 +26,16 @@
                 >
                     account
                 </x-ui.link>
+
+                @if(auth()->user()->role === 'admin')
+                    <x-ui.link
+                        :href="route('admin.service.index')"
+                        :attributes="$attributes->when(Request::routeIs('admin.service.index'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
+                        variant="soft"
+                    >
+                        kelola layanan
+                    </x-ui.link>
+                @endif
             </div>
         </div>
 
@@ -102,13 +112,24 @@
             </div>
             <div class="mt-6 flow-root">
                 <div class="-my-6 divide-y divide-base-200/10">
-                    <div class="py-6">
+                    <div class="space-y-2 py-6">
                         @guest
                             <a href="{{ route('login') }}"
                                class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10 bg-base-100/6">Login</a>
                             <a href="{{ route('register') }}"
                                class="mt-2 block rounded-md border ring-1 ring-base-200/10 bg-base-200/20 px-3 py-2.5 text-base font-semibold text-base-100">Register</a>
                         @endguest
+
+                        @auth
+                            <a href="{{ route('dashboard') }}"
+                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Dashboard</a>
+                            <a href="{{ route('settings.account') }}"
+                               class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Account</a>
+                            @if(auth()->user()->role === 'admin')
+                                <a href="{{ route('admin.service.index') }}"
+                                   class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Kelola Layanan</a>
+                            @endif
+                        @endauth
                     </div>
                 </div>
             </div>

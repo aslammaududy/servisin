@@ -29,6 +29,12 @@
             Dashboard
         </x-ui.dropdown.item>
 
+        @if($user->role === 'admin')
+            <x-ui.dropdown.item :href="route('admin.service.index')" wire:navigate.live>
+                Kelola Layanan
+            </x-ui.dropdown.item>
+        @endif
+
         <x-ui.dropdown.separator />
 
         <form
