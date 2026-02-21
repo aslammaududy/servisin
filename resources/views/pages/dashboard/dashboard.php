@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Booking;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 new class extends Component {
@@ -11,7 +12,11 @@ new class extends Component {
     {
         return \App\Models\BookingItem::with(['booking.user', 'booking.technician', 'damageType.service'])
             ->has('booking')
+            ->when(auth()->user()->role === 'user', function (Builder $query) { //query untuk customer
+                return $query->whereRelation('booking', 'user_id', auth()->user()->id);
+            })
             ->groupBy('booking_id')
+            ->orderByDesc('booking_id')
             ->paginate(10);
     }
 
@@ -57,6 +62,16 @@ new class extends Component {
             });
 
         return $services;
+    }
+
+    #[\Livewire\Attributes\Computed]
+    public function estimatedTotal(int $booking_id): int
+    {
+        $estimated_total = $this->bookingItems->where('booking_id', $booking_id)->reduce(function (?int $carry, \App\Models\BookingItem $item) {
+            return $carry + $item->damageType->price;
+        }, 0);
+
+        return $estimated_total + $this->bookingItems->where('booking_id', $booking_id)->pluck('booking.shipping_fee')[0];
     }
 };
 
