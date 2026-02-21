@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Service extends Model
 {
@@ -12,6 +12,11 @@ class Service extends Model
         'description',
         'is_active',
     ];
+
+    public function damageTypes(): HasMany
+    {
+        return $this->hasMany(DamageType::class);
+    }
 
     protected function casts(): array
     {

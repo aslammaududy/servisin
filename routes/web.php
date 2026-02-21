@@ -8,12 +8,12 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\VerifyEmail;
-use App\Livewire\Dashboard;
 use App\Livewire\Settings\Account;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', Livewire\Home::class)->name('home');
+//Route::get('/', Livewire\Home::class)->name('home');
+Route::livewire('/', 'pages::service.index')->name('home');
 
 /** AUTH ROUTES */
 Route::get('/register', Register::class)->name('register');
