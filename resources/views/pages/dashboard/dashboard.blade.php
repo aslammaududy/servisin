@@ -22,7 +22,7 @@
                         Total Booking
                     </x-ui.text>
                     <x-ui.heading level="h2" size="lg">
-                        {{ $this->bookingItems->total() }}
+                        {{ $this->bookings->total() }}
                     </x-ui.heading>
                 </div>
             </x-ui.card>
@@ -79,7 +79,7 @@
                 </x-ui.heading>
 
                 <x-ui.text size="sm" class="text-gray-500">
-                    <flux:table :paginate="$this->bookingItems">
+                    <flux:table :paginate="$this->bookings">
                         <flux:table.columns>
                             <flux:table.column>Tanggal</flux:table.column>
                             <flux:table.column>Pelanggan</flux:table.column>
@@ -89,21 +89,21 @@
                             <flux:table.column>Aksi</flux:table.column>
                         </flux:table.columns>
 
-                        @foreach($this->bookingItems as $item)
+                        @foreach($this->bookings as $booking)
                             <flux:table.rows>
                                 <flux:table.row>
                                     <flux:table.cell variant="strong">
-                                        {{ Carbon\Carbon::createFromTimestamp($item->booking->booking_date)->format('d M Y') }}
+                                        {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('d M Y') }}
                                     </flux:table.cell>
-                                    <flux:table.cell variant="strong">{{ $item->booking->user->name }}</flux:table.cell>
+                                    <flux:table.cell variant="strong">{{ $booking->user->name }}</flux:table.cell>
                                     <flux:table.cell
-                                        variant="strong">{{ implode(", ", array_unique($this->services[$item->booking_id])) }}</flux:table.cell>
-                                    <flux:table.cell variant="strong">{{ $item->booking->status }}</flux:table.cell>
+                                        variant="strong">{{ implode(", ", array_unique($this->services[$booking->id])) }}</flux:table.cell>
+                                    <flux:table.cell variant="strong">{{ $booking->status }}</flux:table.cell>
                                     <flux:table.cell
-                                        variant="strong">{{ $item->booking->technician->name ?? 'Belum ada' }}</flux:table.cell>
+                                        variant="strong">{{ $booking->technician->name ?? 'Belum ada' }}</flux:table.cell>
                                     <flux:table.cell variant="strong">
                                         <x-ui.link :primary="true" class="text-blue-600" variant="ghost"
-                                                   href="{{ route('booking.detail',['booking' => $item->booking]) }}"
+                                                   href="{{ route('booking.detail',['booking' => $booking]) }}"
                                                    target="_blank">
                                             Detail
                                         </x-ui.link>

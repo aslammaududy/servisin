@@ -4,19 +4,19 @@ use App\Models\Booking;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
-new class extends Component {
+new class extends Component
+{
     use \Livewire\WithPagination;
 
     #[\Livewire\Attributes\Computed]
-    public function bookingItems()
+    public function bookings()
     {
-        return \App\Models\BookingItem::with(['booking.user', 'booking.technician', 'damageType.service'])
-            ->has('booking')
-            ->when(auth()->user()->role === 'user', function (Builder $query) { //query untuk customer
-                return $query->whereRelation('booking', 'user_id', auth()->user()->id);
+        return Booking::with(['user', 'technician', 'bookingItems.damageType.service'])
+            ->has('bookingItems')
+            ->when(auth()->user()->role === 'user', function (Builder $query) {
+                return $query->where('user_id', auth()->user()->id);
             })
-            ->groupBy('booking_id')
-            ->orderByDesc('booking_id')
+            ->latest()
             ->paginate(10);
     }
 
@@ -35,7 +35,9 @@ new class extends Component {
     #[\Livewire\Attributes\Computed]
     public function averageCompletedBooking(): float
     {
-        return $this->completedBookings / $this->bookingItems->total();
+        $total = $this->bookings->total();
+
+        return $total > 0 ? $this->completedBookings / $total : 0;
     }
 
     #[\Livewire\Attributes\Computed]
@@ -43,23 +45,19 @@ new class extends Component {
     {
         $rate = $this->averageCompletedBooking * 100;
 
-        return $rate . '%';
+        return $rate.'%';
     }
 
     #[\Livewire\Attributes\Computed]
     public function services(): array
     {
-        $booking_item_ids = $this->bookingItems->pluck('booking_id');
         $services = [];
 
-        \App\Models\Booking::with('bookingItems.damageType.service')
-            ->whereIn('id', $booking_item_ids)
-            ->get()
-            ->each(function (Booking $booking) use (&$services) {
-                return $booking->bookingItems->each(function (\App\Models\BookingItem $bookingItem) use ($booking, &$services) {
-                    $services[$booking->id][] = $bookingItem->damageType->service->name;
-                });
+        $this->bookings->each(function (Booking $booking) use (&$services) {
+            $booking->bookingItems->each(function (\App\Models\BookingItem $bookingItem) use ($booking, &$services) {
+                $services[$booking->id][] = $bookingItem->damageType->service->name;
             });
+        });
 
         return $services;
     }
@@ -67,11 +65,12 @@ new class extends Component {
     #[\Livewire\Attributes\Computed]
     public function estimatedTotal(int $booking_id): int
     {
-        $estimated_total = $this->bookingItems->where('booking_id', $booking_id)->reduce(function (?int $carry, \App\Models\BookingItem $item) {
+        $booking = $this->bookings->firstWhere('id', $booking_id);
+
+        $estimated_total = $booking->bookingItems->reduce(function (?int $carry, \App\Models\BookingItem $item) {
             return $carry + $item->damageType->price;
         }, 0);
 
-        return $estimated_total + $this->bookingItems->where('booking_id', $booking_id)->pluck('booking.shipping_fee')[0];
+        return $estimated_total + ($booking->shipping_fee ?? 0);
     }
 };
-

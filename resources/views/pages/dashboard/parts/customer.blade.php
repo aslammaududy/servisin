@@ -16,44 +16,44 @@
         </x-ui.button>
     </div>
 </div>
-@foreach($this->bookingItems as $item)
+@foreach($this->bookings as $booking)
     <div class="grid grid-cols-1 gap-4">
         <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
             <div class="space-y-1">
                 <x-ui.text size="sm" class="text-gray-500 uppercase tracking-wide">
-                    {{ $item->booking->created_at->format('d M Y') }}
+                    {{ $booking->created_at->format('d M Y') }}
                 </x-ui.text>
                 <div class="flex justify-between items-start mt-5">
                     <x-ui.heading level="h3" size="lg">
-                        {{ implode(", ", array_unique($this->services[$item->booking_id])) }}
+                        {{ implode(", ", array_unique($this->services[$booking->id])) }}
                     </x-ui.heading>
                     <div class="flex justify-between items-end">
                         <x-ui.text class="text-base text-gray-400 mr-1">
                             Status:
                         </x-ui.text>
                         <x-ui.badge color="sky">
-                            {{ $item->booking->status }}
+                            {{ $booking->status }}
                         </x-ui.badge>
                     </div>
                 </div>
                 <x-ui.text size="sm" class="text-gray-400">
-                    {{ $item->booking->notes }}
+                    {{ $booking->notes }}
                 </x-ui.text>
                 <div class="flex justify-between items-start mt-5">
                     <x-ui.text size="xs" class="opacity-50">
-                        Jadwal: {{ Carbon\Carbon::createFromTimestamp($item->booking->booking_date)->format('d M Y H:i') }}
+                        Jadwal: {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('d M Y H:i') }}
                     </x-ui.text>
 
                     <x-ui.text size="xs" class="opacity-50">
-                        Estimasi: Rp {{ number_format($this->estimatedTotal($item->booking_id), 0, ',', '.') }}
+                        Estimasi: Rp {{ number_format($this->estimatedTotal($booking->id), 0, ',', '.') }}
                     </x-ui.text>
 
                     <x-ui.text size="xs" class="opacity-50">
-                        Teknisi: {{ $item->booking->technician->name ?? 'Belum ditugaskan' }}
+                        Teknisi: {{ $booking->technician->name ?? 'Belum ditugaskan' }}
                     </x-ui.text>
 
                     <x-ui.link :primary="true" class="text-blue-600" variant="ghost"
-                               href="{{ route('booking.detail',['booking' => $item->booking]) }}"
+                               href="{{ route('booking.detail',['booking' => $booking]) }}"
                                target="_blank">
                         Detail
                     </x-ui.link>

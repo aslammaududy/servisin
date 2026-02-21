@@ -15,26 +15,23 @@ new class extends Component {
     #[\Livewire\Attributes\Computed]
     public function jobs()
     {
-        return \App\Models\BookingItem::with('damageType.service')
-            ->whereRelation('booking', 'technician_id', auth()->id())
-            ->groupBy('booking_id')
+        return \App\Models\Booking::with('bookingItems.damageType.service')
+            ->where('technician_id', auth()->id())
+            ->has('bookingItems')
+            ->latest()
             ->paginate(10);
     }
 
     #[\Livewire\Attributes\Computed]
     public function services(): array
     {
-        $booking_item_ids = $this->jobs->pluck('booking_id');
         $services = [];
 
-        \App\Models\Booking::with('bookingItems.damageType.service')
-            ->whereIn('id', $booking_item_ids)
-            ->get()
-            ->each(function (\App\Models\Booking $booking) use (&$services) {
-                return $booking->bookingItems->each(function (\App\Models\BookingItem $bookingItem) use ($booking, &$services) {
-                    $services[$booking->id][] = $bookingItem->damageType->service->name;
-                });
+        $this->jobs->each(function (\App\Models\Booking $booking) use (&$services) {
+            $booking->bookingItems->each(function (\App\Models\BookingItem $bookingItem) use ($booking, &$services) {
+                $services[$booking->id][] = $bookingItem->damageType->service->name;
             });
+        });
 
         return $services;
     }
@@ -78,21 +75,21 @@ new class extends Component {
             <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
                 <div class="space-y-1">
                     <x-ui.text size="sm" class="text-gray-500 uppercase tracking-wide">
-                        {{ Carbon\Carbon::createFromTimestamp($job->booking->booking_date)->format('d M Y H:i') }}
+                        {{ Carbon\Carbon::createFromTimestamp($job->booking_date)->format('d M Y H:i') }}
                     </x-ui.text>
                     <x-ui.heading level="h3" size="lg">
-                        {{ implode(", ", array_unique($this->services[$job->booking_id])) }}
+                        {{ implode(", ", array_unique($this->services[$job->id])) }}
                     </x-ui.heading>
                     <x-ui.text size="sm" class="text-gray-400">
-                        {{ $job->booking->notes }}
+                        {{ $job->notes }}
                     </x-ui.text>
                     <div class="flex justify-between items-start mt-5">
                         <x-ui.text size="xs" class="opacity-50">
-                            {{ $job->booking->address }}
+                            {{ $job->address }}
                         </x-ui.text>
 
                         <x-ui.link :primary="true" class="text-blue-600" variant="ghost"
-                                   href="{{ route('booking.detail',['booking' => $job->booking]) }}"
+                                   href="{{ route('booking.detail',['booking' => $job]) }}"
                                    target="_blank">
                             Detail
                         </x-ui.link>
