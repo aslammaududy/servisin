@@ -8,7 +8,7 @@
             class="cursor-pointer"
             :name="$user->name"
             {{-- : name="$user->avatar" give avatar's image source if have any!  --}}
-            size="sm" 
+            size="sm"
         />
     </x-slot:button>
 
@@ -23,10 +23,6 @@
 
         <x-ui.dropdown.item :href="route('settings.account')" wire:navigate.live>
             Account
-        </x-ui.dropdown.item>
-
-        <x-ui.dropdown.item :href="route('dashboard')" wire:navigate.live>
-            Dashboard
         </x-ui.dropdown.item>
 
         @if($user->role === 'admin')

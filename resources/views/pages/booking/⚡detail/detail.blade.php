@@ -1,4 +1,15 @@
 <div class="space-y-6">
+    <div class="flex items-start justify-between">
+        <div>
+            <x-ui.heading level="h1" size="xl">
+                @if(auth()->user()->role === 'technician')
+                    Detail Job
+                @else
+                    Detail Booking
+                @endif
+            </x-ui.heading>
+        </div>
+    </div>
 
     {{-- ========================= --}}
     {{-- ROW 1 : 4 SUMMARY CARDS --}}

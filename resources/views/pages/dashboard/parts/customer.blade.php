@@ -1,3 +1,14 @@
+<div class="flex items-start justify-between">
+    <div>
+        <x-ui.heading level="h1" size="xl">
+            Booking Saya
+        </x-ui.heading>
+        <x-ui.text size="sm" class="mt-1 text-gray-500">
+            Lihat status pengerjaan booking Anda
+        </x-ui.text>
+    </div>
+</div>
+
 <div class="grid grid-cols-1 gap-4">
     <div class="flex justify-end">
         <x-ui.button type="button" color="blue" href="{{ route('booking.create') }}">

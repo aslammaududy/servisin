@@ -48,6 +48,17 @@ new class extends Component {
 ?>
 
 <div class="space-y-6">
+    <div class="flex items-start justify-between">
+        <div>
+            <x-ui.heading level="h1" size="xl">
+                Job Teknisi
+            </x-ui.heading>
+            <x-ui.text size="sm" class="mt-1 text-gray-500">
+                Daftar booking yang ditugaskan kepada Anda
+            </x-ui.text>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 gap-4">
         <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
             <x-ui.heading level="h3" size="md" class="mb-4">

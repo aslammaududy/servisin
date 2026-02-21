@@ -34,6 +34,6 @@
     <a class="inline-flex items-center"
        href="{{ route('home') }}"
        wire:navigate>
-        <h1 class='text-primary-brand text-lg font-bold leading-8'>Sheaf UI</h1>
+        <h1 class='text-primary-brand text-lg font-bold leading-8'>Servis Elektronik</h1>
     </a>
 </div>

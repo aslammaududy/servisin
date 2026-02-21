@@ -11,13 +11,23 @@
         <div class="flex items-center pr-7">
             <x-app.logo />
             <div class="flex gap-4 ml-8">
-                <x-ui.link
-                    :href="route('dashboard')"
-                    :attributes="$attributes->when(Request::routeIs('dashboard'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
-                    variant="soft"
-                >
-                    dashboard
-                </x-ui.link>
+                @if(auth()->user()->role === 'technician')
+                    <x-ui.link
+                        :href="route('jobs.list')"
+                        :attributes="$attributes->when(Request::routeIs('jobs.list'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
+                        variant="soft"
+                    >
+                        Jobs
+                    </x-ui.link>
+                @else
+                    <x-ui.link
+                        :href="route('dashboard')"
+                        :attributes="$attributes->when(Request::routeIs('dashboard'), fn($attr)=> $attr->class('dark:!text-white text-neutral-900'))"
+                        variant="soft"
+                    >
+                        dashboard
+                    </x-ui.link>
+                @endif
 
                 <x-ui.link
                     :href="route('settings.account')"
@@ -75,7 +85,7 @@
                 vertical
             />
 
-{{--            <x-ui.theme-switcher variant="inline"/>--}}
+            {{--            <x-ui.theme-switcher variant="inline"/>--}}
         </div>
     </nav>
 
@@ -86,28 +96,29 @@
          x-cloak=""
          aria-modal="true">
         <div class="fixed inset-0 z-50 bg-background"></div>
-        <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-base-200/10"
-             x-on:click.away="open = false">
+        <div
+            class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-base-200/10"
+            x-on:click.away="open = false">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <x-app.logo />
+                    <x-app.logo/>
                 </div>
 
                 <div class="flex items-center">
-                <button type="button"
-                        class="-m-2.5 rounded-md p-2.5 text-base-100"
-                        x-on:click="open = false">
-                    <span class="sr-only">Close menu</span>
-                    <svg class="h-6 w-6"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke-width="1.5"
-                         stroke="currentColor">
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                    <button type="button"
+                            class="-m-2.5 rounded-md p-2.5 text-base-100"
+                            x-on:click="open = false">
+                        <span class="sr-only">Close menu</span>
+                        <svg class="h-6 w-6"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke-width="1.5"
+                             stroke="currentColor">
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
             <div class="mt-6 flow-root">
@@ -127,7 +138,8 @@
                                class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Account</a>
                             @if(auth()->user()->role === 'admin')
                                 <a href="{{ route('admin.service.index') }}"
-                                   class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Kelola Layanan</a>
+                                   class="-mx-3 block rounded-field px-3 py-2.5 text-base font-semibold leading-7 text hover:bg-base-200/10">Kelola
+                                    Layanan</a>
                             @endif
                         @endauth
                     </div>

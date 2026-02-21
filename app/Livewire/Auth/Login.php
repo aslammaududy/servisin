@@ -26,7 +26,12 @@ final class Login extends Component
 
         Session::regenerate();
 
-        Toast::success("You have successfully logged in!"); 
+        Toast::success("You have successfully logged in!");
+
+        if (auth()->user()->role === 'technician') {
+            $this->redirectIntended(default: route('jobs.list', absolute: false), navigate: true);
+            return;
+        }
 
         $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
     }

@@ -4,6 +4,17 @@
         @include('pages.dashboard.parts.customer')
     @else
 
+        <div class="flex items-start justify-between">
+            <div>
+                <x-ui.heading level="h1" size="xl">
+                    Dashboard Admin
+                </x-ui.heading>
+                <x-ui.text size="sm" class="mt-1 text-gray-500">
+                    Kelola booking, teknisi dan layanan
+                </x-ui.text>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <x-ui.card size="lg">
                 <div class="space-y-1">
