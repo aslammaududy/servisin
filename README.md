@@ -1,84 +1,171 @@
-# SheafUI Official Starter Kit
+# Servisin
 
-The official starter kit to jumpstart your next Laravel application, powered by the SheafUI component platform.
+Aplikasi pemesanan jasa servis elektronik rumah tangga.
 
-## Installation
-to start using new laravel app using this skeleton
-
-```shell
- laravel new example-name --using=sheaf/starter-kit
-```
-
-
-##  Zero Dependency, Full Control
-
-This starter kit requires no external dependencies and gives you **100% ownership** of your code. While powered by SheafUI resources, every line of code is yours to modify and customize as needed.
-
-## ✨ Features
-
-- [x] **SheafUI Integration** - Optional setup for complete development with the SheafUI platform
-- [x] **Complete Auth System** - Login, register, logout, email verification, password reset/forgot, password confirmation - all with comprehensive tests
-- [x] **Clean Dark Theme** - Seamless light/dark mode switching
-- [x] **Flexible Toast System** - User-friendly notifications out of the box
-- [x] **Basic Account Management** - Update account information (name, email) and change password
-
-> [!NOTE]
-> Dashboard and settings pages are temporary implementations. They will be refactored once the `sidebar`, `header`, and `navlist` components are built and integrated.
-
-> [!NOTE]
-> also avatar uplaod will be added once the file upload components is built and integrated
-
-
-
-
-## Tech Stack
-
-- **Laravel 12** - Latest Laravel framework
-- **Livewire 3** - Modern reactive components  
-- **Heroicons** - Beautiful SVG icons via `wireui/heroicons`
-- **Sheaf CLI** - SheafUI command-line tools
-- **Tailwind 4** - Modern utility-first CSS framework
-- **Pest 4** - Elegant testing framework
-
-## Included Components
-
-Your starter kit comes pre-loaded with essential UI components:
-
-- [Icon](https://sheafui.dev/docs/components/icon) - SVG icon system
-- [Button](https://sheafui.dev/docs/components/button) - Customizable button variants
-- [Avatar](https://sheafui.dev/docs/components/avatar) - User profile images with fallbacks
-- [Dropdown](https://sheafui.dev/docs/components/dropdown) - Accessible dropdown menus
-- [Input](https://sheafui.dev/docs/components/input) - Form input controls
-- [Separator](https://sheafui.dev/docs/components/separator) - Visual content dividers
-- [Field](https://sheafui.dev/docs/components/field) - Form field wrapper
-- [Fieldset](https://sheafui.dev/docs/components/fieldset) - Grouped form controls
-- [Label](https://sheafui.dev/docs/components/label) - Accessible form labels
-- [Link](https://sheafui.dev/docs/components/link) - Styled navigation links
-- [Theme Switcher](https://sheafui.dev/docs/components/theme-switcher) - Light/dark mode toggle
-- [Toast](https://sheafui.dev/docs/components/toast) - Notification system
-- [Error](https://sheafui.dev/docs/components/error) - Error handling displays
-- [Text](https://sheafui.dev/docs/components/text) - Unified Text styling
-- [Heading](https://sheafui.dev/docs/components/heading) - Heading components
-- [Card](https://sheafui.dev/docs/components/card) - blocks of UI
-
-## Perfect For
-
-- New Laravel projects requiring solid UI foundation.
-- Developers who want proven components without vendor lock-in.
-- Teams needing authentication and theming out of the box.
+A household electronics repair service booking application.
 
 ---
 
-Ready to build something amazing? Get started with SheafUI today! 🎉
+🇮🇩 [Bahasa Indonesia](#-bahasa-indonesia) · 🇬🇧 [English](#-english)
 
-## Author 
-[MOHAMED CHARRAFI](https://github.com/CharrafiMed)
+---
 
-## Others 
+## 🇮🇩 Bahasa Indonesia
 
-the borders pattern used at home, auth pages was designed by [AYOUB EL HAJJI](https://github.com/Ayoubhj866)
+### Tentang
 
-## License
+Servisin adalah aplikasi berbasis web untuk pemesanan jasa servis elektronik rumah tangga. Pelanggan dapat memesan layanan perbaikan (AC, TV, mesin cuci, kulkas), memilih jenis kerusakan, mengunggah foto, dan melacak status booking mereka secara real-time.
 
-Sheaf UI is open source software licensed under the [MIT License](LICENSE).
+### Fitur
 
+- **Pemesanan Servis** — Pesan layanan perbaikan elektronik dengan memilih jenis layanan dan kerusakan
+- **Katalog Layanan** — Daftar layanan yang tersedia beserta jenis kerusakan dan harga
+- **Pelacakan Status** — Pantau status booking dari Menunggu → Teknisi Ditugaskan → Sedang Dikerjakan → Selesai
+- **Dashboard** — Ringkasan statistik booking untuk pelanggan dan admin
+- **Manajemen Admin** — Kelola layanan, jenis kerusakan, dan pengguna
+- **Daftar Pekerjaan** — Teknisi dapat melihat dan mengelola pekerjaan yang ditugaskan
+- **Sistem Komplain** — Ajukan keluhan terkait booking dengan lampiran foto
+- **Autentikasi Lengkap** — Login, register, verifikasi email, lupa & reset password
+- **Mode Gelap** — Dukungan tema terang dan gelap
+
+### Layanan yang Tersedia
+
+| Layanan | Contoh Kerusakan |
+|---------|------------------|
+| Servis AC | AC tidak dingin, AC bocor, AC mati total, freon habis |
+| Servis TV | TV tidak menyala, layar gelap, layar bergaris |
+| Servis Mesin Cuci | Mesin tidak menyala, tidak bisa berputar, air tidak masuk |
+| Servis Kulkas | Kulkas tidak dingin, bocor air, kompresor tidak jalan |
+
+### Peran Pengguna
+
+- **Pelanggan** — Memesan servis dan melacak status booking
+- **Teknisi** — Menerima dan mengerjakan pekerjaan yang ditugaskan
+- **Admin** — Mengelola seluruh layanan, pengguna, dan booking
+
+### Tech Stack
+
+- **Laravel 12** — Framework PHP
+- **Livewire 4** — Komponen reaktif tanpa JavaScript
+- **Tailwind CSS 4** — Utility-first CSS framework
+- **Sheaf UI** — Pustaka komponen UI
+- **Pest 4** — Framework testing
+- **SQLite / MySQL** — Database
+
+### Instalasi
+
+```bash
+# Clone repositori
+git clone https://github.com/aslammaududy/servisin.git
+cd servisin
+
+# Install dependensi
+composer install
+npm install
+
+# Konfigurasi environment
+cp .env.example .env
+php artisan key:generate
+
+# Migrasi dan seed database
+php artisan migrate --seed
+
+# Build assets
+npm run build
+
+# Buat akun admin
+php artisan app:create-admin
+
+# Jalankan aplikasi
+composer run dev
+```
+
+### Testing
+
+```bash
+php artisan test
+```
+
+---
+
+## 🇬🇧 English
+
+### About
+
+Servisin is a web-based application for booking household electronics repair services. Customers can book repair services (AC, TV, washing machine, refrigerator), select a damage type, upload photos, and track their booking status in real-time.
+
+### Features
+
+- **Service Booking** — Book electronics repair services by selecting the service type and damage
+- **Service Catalog** — Browse available services with damage types and pricing
+- **Status Tracking** — Track booking status from Pending → Technician Assigned → In Progress → Completed
+- **Dashboard** — Booking statistics overview for customers and admins
+- **Admin Management** — Manage services, damage types, and users
+- **Job List** — Technicians can view and manage assigned jobs
+- **Complaint System** — File complaints related to bookings with photo attachments
+- **Full Authentication** — Login, register, email verification, forgot & reset password
+- **Dark Mode** — Light and dark theme support
+
+### Available Services
+
+| Service | Example Damages |
+|---------|----------------|
+| AC Repair | AC not cooling, AC leaking, AC dead, freon leak |
+| TV Repair | TV won't turn on, blank screen, striped display |
+| Washing Machine Repair | Won't start, won't spin, water not flowing in |
+| Refrigerator Repair | Not cooling, water leak, compressor failure |
+
+### User Roles
+
+- **Customer** — Book services and track booking status
+- **Technician** — Receive and work on assigned jobs
+- **Admin** — Manage all services, users, and bookings
+
+### Tech Stack
+
+- **Laravel 12** — PHP framework
+- **Livewire 4** — Reactive components without JavaScript
+- **Tailwind CSS 4** — Utility-first CSS framework
+- **Sheaf UI** — UI component library
+- **Pest 4** — Testing framework
+- **SQLite / MySQL** — Database
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/aslammaududy/servisin.git
+cd servisin
+
+# Install dependencies
+composer install
+npm install
+
+# Configure environment
+cp .env.example .env
+php artisan key:generate
+
+# Migrate and seed the database
+php artisan migrate --seed
+
+# Build assets
+npm run build
+
+# Create an admin account
+php artisan app:create-admin
+
+# Run the application
+composer run dev
+```
+
+### Testing
+
+```bash
+php artisan test
+```
+
+---
+
+## Lisensi / License
+
+Open source, licensed under the [MIT License](LICENCE.md).
