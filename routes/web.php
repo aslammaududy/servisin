@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/account', Account::class)->name('settings.account');
     Route::livewire('/admin/layanan', 'pages::admin.service.index')->name('admin.service.index');
     Route::livewire('/admin/pengguna', 'pages::admin.user.index')->name('admin.user.index');
+    Route::livewire('/admin/pengaturan', 'pages::admin.site-settings')->name('admin.site-settings');
 });
 
 Route::middleware(['auth'])->group(function () {

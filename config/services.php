@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'bank_account' => [
+        'bank_name' => env('BANK_NAME', 'BCA'),
+        'account_number' => env('BANK_ACCOUNT_NUMBER', '1234567890'),
+        'account_name' => env('BANK_ACCOUNT_NAME', 'PT Servisin Indonesia'),
+    ],
+
 ];

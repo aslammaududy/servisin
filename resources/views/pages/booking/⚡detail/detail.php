@@ -2,10 +2,12 @@
 
 use App\Models\Booking;
 use App\Models\BookingItem;
+use App\Models\Complaint;
 use Livewire\Component;
 
 new class extends Component {
     use \App\Livewire\Concerns\HasToast;
+    use \Livewire\WithFileUploads;
 
     public Booking $booking;
     public string $search_technician = '';
@@ -20,9 +22,24 @@ new class extends Component {
         'Batal'
     ];
 
+    // Complaint properties
+    public string $complaint_message = '';
+    public $complaint_photo;
+
+    // Payment proof properties
+    public $payment_proof;
+
     public function mount(Booking $booking): void
     {
-        $this->booking = $booking->load(['bookingItems.damageType.service', 'user', 'technician', 'bookingEvents.changedBy']);
+        $this->booking = $booking->load([
+            'bookingItems.damageType.service', 
+            'user', 
+            'technician', 
+            'bookingEvents.changedBy', 
+            'complaints.user', 
+            'complaints.complainPhotos',
+            'paymentProofs'
+        ]);
         $this->booking_status = $booking->status;
         $this->technician_id = $booking->technician_id;
         $this->shipping_fee = $booking->shipping_fee;
@@ -65,6 +82,12 @@ new class extends Component {
         return \App\Models\User::where('role', 'technician')->whereLike('name', "%$this->search_technician%")->get();
     }
 
+    #[\Livewire\Attributes\Computed]
+    public function complaints()
+    {
+        return $this->booking->complaints()->with('user')->latest()->get();
+    }
+
     public function updatedBookingStatus(string $status): void
     {
         $this->booking->status = $status;
@@ -87,6 +110,66 @@ new class extends Component {
         $this->booking->save();
 
         $this->toastSuccess('Berhasil update ongkos kirim');
+    }
 
+    public function submitComplaint(): void
+    {
+        $this->validate([
+            'complaint_message' => 'required|min:10',
+            'complaint_photo' => 'nullable|image|max:1024',
+        ], [
+            'complaint_message.required' => 'Pesan komplain wajib diisi',
+            'complaint_message.min' => 'Pesan komplain minimal 10 karakter',
+            'complaint_photo.image' => 'File harus berformat gambar',
+            'complaint_photo.max' => 'File maksimal 1MB',
+        ]);
+
+        $complaint = Complaint::create([
+            'booking_id' => $this->booking->id,
+            'user_id' => auth()->id(),
+            'message' => $this->complaint_message,
+            'status' => 'pending',
+        ]);
+
+        if ($this->complaint_photo) {
+            $file_name = $this->complaint_photo->getClientOriginalName();
+            $path = $this->complaint_photo->storeAs(path: 'complaints', name: $file_name);
+
+            \App\Models\ComplainPhoto::create([
+                'complaint_id' => $complaint->id,
+                'path' => $path,
+                'original_name' => $file_name,
+            ]);
+        }
+
+        $this->complaint_message = '';
+        $this->complaint_photo = null;
+
+        $this->toastSuccess('Komplain berhasil dikirim');
+    }
+
+    public function uploadPaymentProof(): void
+    {
+        $this->validate([
+            'payment_proof' => 'required|image|max:2048',
+        ], [
+            'payment_proof.required' => 'Bukti pembayaran wajib diunggah',
+            'payment_proof.image' => 'File harus berformat gambar',
+            'payment_proof.max' => 'File maksimal 2MB',
+        ]);
+
+        $file_name = $this->payment_proof->getClientOriginalName();
+        $path = $this->payment_proof->storeAs(path: 'payment_proofs', name: $file_name);
+
+        \App\Models\BookingPaymentProof::create([
+            'booking_id' => $this->booking->id,
+            'path' => $path,
+            'original_name' => $file_name,
+            'status' => 'pending',
+        ]);
+
+        $this->payment_proof = null;
+
+        $this->toastSuccess('Bukti pembayaran berhasil diunggah');
     }
 };

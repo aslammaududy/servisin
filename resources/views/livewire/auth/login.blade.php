@@ -35,10 +35,17 @@
     </x-ui.button>
 
     <x-ui.link
-        variant="soft" 
+        variant="soft"
         href="{{ route('register') }}"
     >
-        I dont have an account? 
+        I dont have an account?
         <span class="underline">Sign up</span>
+    </x-ui.link>
+
+    <x-ui.link
+        variant="soft"
+        href="{{ route('forgot-password') }}"
+    >
+        Lupa password?
     </x-ui.link>
 </form>

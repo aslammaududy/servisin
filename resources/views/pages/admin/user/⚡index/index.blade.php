@@ -11,7 +11,7 @@
         </div>
 
         <x-ui.button color="blue" wire:click="create">
-            Tambah Pengguna
+            Tambah Teknisi
         </x-ui.button>
     </div>
 
@@ -128,10 +128,10 @@
                     x-on:keydown.escape.window="open = false"
                 >
                     <x-ui.heading level="h2" size="lg">
-                        {{ $editingUserId ? 'Edit Pengguna' : 'Tambah Pengguna' }}
+                        {{ $editingUserId ? 'Edit Teknisi' : 'Tambah Teknisi' }}
                     </x-ui.heading>
                     <x-ui.text size="sm" class="mt-1 text-gray-500">
-                        {{ $editingUserId ? 'Perbarui informasi pengguna.' : 'Isi informasi pengguna baru.' }}
+                        {{ $editingUserId ? 'Perbarui informasi teknisi.' : 'Isi informasi teknisi baru.' }}
                     </x-ui.text>
 
                     <form wire:submit="save" class="mt-6 space-y-4">
@@ -179,7 +179,7 @@
                                 Batal
                             </x-ui.button>
                             <x-ui.button type="submit" color="blue">
-                                {{ $editingUserId ? 'Simpan Perubahan' : 'Tambah Pengguna' }}
+                                {{ $editingUserId ? 'Simpan Perubahan' : 'Tambah Teknisi' }}
                             </x-ui.button>
                         </div>
                     </form>

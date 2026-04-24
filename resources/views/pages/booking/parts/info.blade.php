@@ -51,8 +51,8 @@
                     <span>Estimasi biaya akan dikonfirmasi admin berdasarkan jenis kerusakan.</span>
                 </li>
                 <li class="flex items-start gap-2">
-                    <x-ui.icon name="arrow-path" class="!size-4 mt-0.5 shrink-0 !text-blue-500" />
-                    <span>Metode pembayaran menggunakan <strong>COD</strong>.</span>
+                    <x-ui.icon name="building-library" class="!size-4 mt-0.5 shrink-0 !text-blue-500" />
+                    <span>Transfer ke {{ bank_account()['bank_name'] }} a.n. {{ bank_account()['account_name'] }} - {{ bank_account()['account_number'] }}</span>
                 </li>
                 <li class="flex items-start gap-2">
                     <x-ui.icon name="arrows-right-left" class="!size-4 mt-0.5 shrink-0 !text-blue-500" />

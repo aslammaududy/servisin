@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SiteSetting;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,9 +21,14 @@ class DatabaseSeeder extends Seeder
             DamageTypeSeeder::class,
         ]);
 
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
-//        ]);
+        // Seed default bank account settings
+        SiteSetting::set('bank_name', 'BCA');
+        SiteSetting::set('bank_account_number', '1234567890');
+        SiteSetting::set('bank_account_name', 'PT Servisin Indonesia');
+
+        //        User::factory()->create([
+        //            'name' => 'Test User',
+        //            'email' => 'test@example.com',
+        //        ]);
     }
 }

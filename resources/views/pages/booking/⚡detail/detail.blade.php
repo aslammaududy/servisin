@@ -282,4 +282,127 @@
             </div>
         </x-ui.card>
     </div>
+
+    {{-- ========================= --}}
+    {{-- ROW 5 : KOMPLAIN (FULL WIDTH) --}}
+    {{-- ========================= --}}
+    <div class="grid grid-cols-1 gap-4">
+        <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+            <x-ui.heading level="h3" size="md" class="mb-4">
+                Komplain
+            </x-ui.heading>
+
+            @if(auth()->user()->role === 'user')
+                <form wire:submit="submitComplaint" class="mb-6 space-y-4">
+                    <x-ui.field>
+                        <x-ui.label>Pesan Komplain</x-ui.label>
+                        <x-ui.textarea wire:model="complaint_message" placeholder="Tuliskan komplain Anda..." />
+                        <x-ui.error name="complaint_message" />
+                    </x-ui.field>
+
+                    <x-ui.field>
+                        <x-ui.label>Foto Komplain (Optional)</x-ui.label>
+                        <x-ui.input wire:model="complaint_photo" type="file"/>
+                        <x-ui.error name="complaint_photo"/>
+                    </x-ui.field>
+
+                    <x-ui.button type="submit" color="blue">
+                        Kirim Komplain
+                    </x-ui.button>
+                </form>
+            @endif
+
+            <div class="space-y-4">
+                @forelse($this->complaints as $complaint)
+                    <x-ui.card size="lg" class="!max-w-none">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <x-ui.text size="sm" class="font-medium">{{ $complaint->user->name }}</x-ui.text>
+                                <x-ui.badge size="sm" class="mt-1">{{ $complaint->status }}</x-ui.badge>
+                            </div>
+                            <x-ui.text size="sm" class="text-gray-500">
+                                {{ $complaint->created_at->format('d M Y H:i') }}
+                            </x-ui.text>
+                        </div>
+                        <x-ui.text size="sm" class="mt-3 text-gray-700">
+                            {{ $complaint->message }}
+                        </x-ui.text>
+                        @if($complaint->complainPhotos->count())
+                            <div class="mt-3 flex gap-2">
+                                @foreach($complaint->complainPhotos as $photo)
+                                    <a href="{{ asset('storage/' . $photo->path) }}" target="_blank" class="text-sm text-blue-600 hover:underline">
+                                        Lihat Foto
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
+                    </x-ui.card>
+                @empty
+                    <x-ui.text size="sm" class="text-gray-500">
+                        Belum ada komplain.
+                    </x-ui.text>
+                @endforelse
+            </div>
+        </x-ui.card>
+    </div>
+
+    {{-- ========================= --}}
+    {{-- ROW 6 : BUKTI PEMBAYARAN (FULL WIDTH) --}}
+    {{-- ========================= --}}
+    @if(auth()->user()->role === 'user' && $booking->status === 'Selesai')
+        <div class="grid grid-cols-1 gap-4">
+            <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+                <x-ui.heading level="h3" size="md" class="mb-4">
+                    Unggah Bukti Pembayaran
+                </x-ui.heading>
+
+                @if($this->booking->paymentProofs->where('status', '!=', 'rejected')->count() === 0)
+                    <form wire:submit="uploadPaymentProof" class="space-y-4">
+                        <x-ui.field>
+                            <x-ui.label>Bukti Pembayaran</x-ui.label>
+                            <x-ui.description>Unggah foto bukti transfer ke {{ bank_account()['bank_name'] }} a.n. {{ bank_account()['account_name'] }} - {{ bank_account()['account_number'] }}</x-ui.description>
+                            <x-ui.input wire:model="payment_proof" type="file"/>
+                            <x-ui.error name="payment_proof"/>
+                        </x-ui.field>
+
+                        <x-ui.button type="submit" color="blue">
+                            Unggah Bukti Pembayaran
+                        </x-ui.button>
+                    </form>
+                @else
+                    <x-ui.text size="sm" class="text-green-600">
+                        Bukti pembayaran sudah diunggah dan sedang diverifikasi.
+                    </x-ui.text>
+                @endif
+            </x-ui.card>
+        </div>
+    @endif
+
+    @if(auth()->user()->role === 'admin')
+        <div class="grid grid-cols-1 gap-4">
+            <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+                <x-ui.heading level="h3" size="md" class="mb-4">
+                    Bukti Pembayaran
+                </x-ui.heading>
+
+                @forelse($this->booking->paymentProofs as $proof)
+                    <div class="mb-4 p-4 border rounded-lg">
+                        <div class="flex justify-between items-start mb-2">
+                            <x-ui.text size="sm" class="font-medium">{{ $proof->original_name }}</x-ui.text>
+                            <x-ui.badge size="sm" color="{{ $proof->status === 'verified' ? 'green' : ($proof->status === 'rejected' ? 'red' : 'yellow') }}">
+                                {{ ucfirst($proof->status) }}
+                            </x-ui.badge>
+                        </div>
+                        <a href="{{ asset('storage/' . $proof->path) }}" target="_blank" class="text-sm text-blue-600 hover:underline">
+                            Lihat Bukti Pembayaran
+                        </a>
+                    </div>
+                @empty
+                    <x-ui.text size="sm" class="text-gray-500">
+                        Belum ada bukti pembayaran diunggah.
+                    </x-ui.text>
+                @endforelse
+            </x-ui.card>
+        </div>
+    @endif
 </div>

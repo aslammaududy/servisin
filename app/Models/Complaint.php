@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Complaint extends Model
 {
@@ -21,5 +22,10 @@ class Complaint extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function complainPhotos(): HasMany
+    {
+        return $this->hasMany(ComplainPhoto::class, 'complaint_id');
     }
 }

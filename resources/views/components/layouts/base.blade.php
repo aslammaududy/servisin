@@ -45,7 +45,7 @@
         });
     </script>
 
-    <body class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-50">
+    <body class="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-950 dark:to-slate-900 text-neutral-900 dark:text-neutral-50 min-h-screen">
 
         {{ $slot }}
 

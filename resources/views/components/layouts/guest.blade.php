@@ -6,7 +6,9 @@
 
     <x-layouts.partials.header />
     
-    {{ $slot }}
+    <div class="pt-24">
+        {{ $slot }}
+    </div>
 
     <x-layouts.partials.footer />
 </x-layouts.base>

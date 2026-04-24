@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Service;
+use App\Models\User;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -32,6 +33,18 @@ new class extends Component {
         }
 
         return \App\Models\DamageType::whereIn('service_id', $this->bookingForm->service_ids)->get();
+    }
+
+    #[\Livewire\Attributes\Computed]
+    public function availableTechnicians()
+    {
+        return User::where('role', 'technician')
+            ->where('is_available_for_job', true)
+            ->withCount(['technicianBookings as active_bookings_count' => function ($query) {
+                $query->whereIn('status', ['assigned', 'on_progress']);
+            }])
+            ->orderBy('active_bookings_count', 'asc')
+            ->get();
     }
 
     public function save(): void
@@ -101,6 +114,23 @@ new class extends Component {
                     @endforeach
                 </x-ui.select>
                 <x-ui.error name="bookingForm.damage_type_ids"/>
+            </x-ui.field>
+
+            <x-ui.field>
+                <x-ui.label>Pilih Teknisi (Optional)</x-ui.label>
+                <x-ui.description>Pilih teknisi yang tersedia. Jika tidak dipilih, admin akan menugaskan teknisi.</x-ui.description>
+                <x-ui.select
+                    wire:model="bookingForm.technician_id"
+                    placeholder="Pilih Teknisi"
+                    clearable
+                >
+                    @foreach($this->availableTechnicians as $technician)
+                        <x-ui.select.option value="{{$technician->id}}">
+                            {{ $technician->name }} ({{ $technician->active_bookings_count }} pekerjaan aktif)
+                        </x-ui.select.option>
+                    @endforeach
+                </x-ui.select>
+                <x-ui.error name="bookingForm.technician_id"/>
             </x-ui.field>
 
             <x-ui.field>

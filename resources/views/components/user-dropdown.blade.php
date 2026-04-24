@@ -32,6 +32,9 @@
             <x-ui.dropdown.item :href="route('admin.user.index')" wire:navigate.live>
                 Kelola Pengguna
             </x-ui.dropdown.item>
+            <x-ui.dropdown.item :href="route('admin.site-settings')" wire:navigate.live>
+                Pengaturan
+            </x-ui.dropdown.item>
         @endif
 
         <x-ui.dropdown.separator />

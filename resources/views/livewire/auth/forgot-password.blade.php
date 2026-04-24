@@ -1,20 +1,29 @@
 <x-slot:title>
     Forgot Password
-</x-slot>
+</x-slot:title>
 
 @if (session('status'))
-    <div class="rounded border border-gray-700 bg-slate-900 p-4">
-        <h2 class="mb-4 text-center text-lg font-bold">Reset your password</h2>
+    <div class="rounded border border-gray-700 bg-slate-900 p-4 mb-4">
         <p class="rounded bg-emerald-400/20 p-3 text-center">An email has been sent to your mailbox.</p>
     </div>
-@else
+@endif
+
+<div class="mx-auto w-full max-w-md">
+    <x-ui.heading level="h1" size="xl" class="mb-2">
+        Lupa Password
+    </x-ui.heading>
+    <x-ui.text size="sm" class="mb-6 text-gray-500">
+        Masukkan alamat email Anda dan kami akan mengirimkan link reset password.
+    </x-ui.text>
+
     <form wire:submit="sendPasswordResetLink"
-          class="mx-auto flex w-full max-w-md flex-col gap-y-4">
+          class="flex w-full flex-col gap-y-4">
         <div class="flex flex-col gap-y-1">
             <x-ui.field required>
                 <x-ui.label>email address</x-ui.label>
                 <x-ui.input 
                     wire:model.blur="email" 
+                    placeholder="email@example.com"
                 />
                 <x-ui.error name="email" />
             </x-ui.field>
@@ -31,4 +40,4 @@
         <a class="text-base-200 text-sm underline"
            href="{{ route('login') }}">Return to login? <span class="font-bold">Log in</span></a>
     </form>
-@endif
+</div>

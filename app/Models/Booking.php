@@ -41,6 +41,16 @@ class Booking extends Model
         return $this->hasMany(BookingEvent::class, 'booking_id');
     }
 
+    public function complaints(): HasMany
+    {
+        return $this->hasMany(Complaint::class, 'booking_id');
+    }
+
+    public function paymentProofs(): HasMany
+    {
+        return $this->hasMany(BookingPaymentProof::class, 'booking_id');
+    }
+
     protected function casts()
     {
         return [
@@ -51,14 +61,14 @@ class Booking extends Model
     protected function status(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => match ($value) {
+            get: fn ($value) => match ($value) {
                 'pending' => 'Menunggu',
                 'assigned' => 'Teknisi Ditugaskan',
                 'on_progress' => 'Sedang Dikerjakan',
                 'done' => 'Selesai',
                 'cancelled' => 'Batal'
             },
-            set: fn($value) => match ($value) {
+            set: fn ($value) => match ($value) {
                 'Menunggu' => 'pending',
                 'Teknisi Ditugaskan' => 'assigned',
                 'Sedang Dikerjakan' => 'on_progress',
