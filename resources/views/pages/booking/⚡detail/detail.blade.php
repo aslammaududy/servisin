@@ -222,7 +222,7 @@
     </div>
 
     @if(auth()->user()->role === 'admin')
-        <div class="grid grid-cols-1 gap-4">
+        <div class="grid grid-cols-1 gap-4 relative z-10">
             <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
                 <x-ui.heading level="h3" size="md" class="mb-4">
                     Update Status
