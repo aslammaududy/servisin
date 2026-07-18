@@ -267,7 +267,7 @@
                             </x-ui.text>
                         </div>
                         <x-ui.text size="sm" class="font-medium mt-2">
-                            Oleh: {{ $event->changedBy->role }}
+                            Oleh: {{ $event->changedBy?->role }}
                         </x-ui.text>
                         @if($event->status == 'Teknisi Ditugaskan')
                             <x-ui.text size="sm" class="font-medium mt-2">

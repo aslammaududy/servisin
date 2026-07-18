@@ -95,7 +95,7 @@
                                     <flux:table.cell variant="strong">
                                         {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('d M Y') }}
                                     </flux:table.cell>
-                                    <flux:table.cell variant="strong">{{ $booking->user->name }}</flux:table.cell>
+                                    <flux:table.cell variant="strong">{{ $booking->user?->name }}</flux:table.cell>
                                     <flux:table.cell
                                         variant="strong">{{ implode(", ", array_unique($this->services[$booking->id])) }}</flux:table.cell>
                                     <flux:table.cell variant="strong">{{ $booking->status }}</flux:table.cell>
