@@ -41,7 +41,7 @@
                 </x-ui.text>
                 <div class="flex justify-between items-start mt-5">
                     <x-ui.text size="xs" class="opacity-50">
-                        Jadwal: {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('d M Y H:i') }}
+                        Jadwal: {{ $booking->booking_date->format('d M Y H:i') }}
                     </x-ui.text>
 
                     <x-ui.text size="xs" class="opacity-50">

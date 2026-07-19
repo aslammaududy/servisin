@@ -1,12 +1,17 @@
 <?php
 
 use App\Models\Booking;
+use App\Services\BookingExportService;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 new class extends Component
 {
     use \Livewire\WithPagination;
+
+    public string $dateFrom = '';
+
+    public string $dateTo = '';
 
     #[\Livewire\Attributes\Computed]
     public function bookings()
@@ -16,8 +21,40 @@ new class extends Component
             ->when(auth()->user()->role === 'user', function (Builder $query) {
                 return $query->where('user_id', auth()->user()->id);
             })
+            ->dateFrom($this->dateFrom ?: null)
+            ->dateTo($this->dateTo ?: null)
             ->latest()
             ->paginate(10);
+    }
+
+    public function resetFilters(): void
+    {
+        $this->dateFrom = '';
+        $this->dateTo = '';
+    }
+
+    public function exportCsv()
+    {
+        abort_unless(auth()->user()->role === 'admin', 403);
+
+        $service = new BookingExportService;
+
+        return $service->toCsv(
+            $this->dateFrom ?: null,
+            $this->dateTo ?: null,
+            null,
+            auth()->user()
+        );
+    }
+
+    public function updatedDateFrom(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedDateTo(): void
+    {
+        $this->resetPage();
     }
 
     #[\Livewire\Attributes\Computed]

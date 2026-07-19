@@ -75,7 +75,7 @@ new class extends Component {
             <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
                 <div class="space-y-1">
                     <x-ui.text size="sm" class="text-gray-500 uppercase tracking-wide">
-                        {{ Carbon\Carbon::createFromTimestamp($job->booking_date)->format('d M Y H:i') }}
+                        {{ $job->booking_date->format('d M Y H:i') }}
                     </x-ui.text>
                     <x-ui.heading level="h3" size="lg">
                         {{ implode(", ", array_unique($this->services[$job->id])) }}

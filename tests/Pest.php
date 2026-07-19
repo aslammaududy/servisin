@@ -11,9 +11,11 @@
 |
 */
 
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+
 uses(
     Tests\TestCase::class,
-    Illuminate\Foundation\Testing\LazilyRefreshDatabase::class,
+    LazilyRefreshDatabase::class,
 )->in('Feature', '../resources/views/');
 
 /*

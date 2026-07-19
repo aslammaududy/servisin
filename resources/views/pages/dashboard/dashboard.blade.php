@@ -72,6 +72,41 @@
             </x-ui.card>
         </div>
 
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div class="w-full sm:max-w-[14rem]">
+                <x-ui.input
+                    type="date"
+                    wire:model.live="dateFrom"
+                    placeholder="Dari tanggal"
+                />
+            </div>
+            <div class="w-full sm:max-w-[14rem]">
+                <x-ui.input
+                    type="date"
+                    wire:model.live="dateTo"
+                    placeholder="Sampai tanggal"
+                />
+            </div>
+            @if($dateFrom !== '' || $dateTo !== '')
+                <x-ui.button
+                    wire:click="resetFilters"
+                    color="zinc"
+                    variant="outline"
+                >
+                    Reset
+                </x-ui.button>
+            @endif
+            <div class="ml-auto flex gap-2">
+                <x-ui.button
+                    wire:click="exportCsv"
+                    color="green"
+                    variant="outline"
+                >
+                    Export CSV
+                </x-ui.button>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 gap-4">
             <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
                 <x-ui.heading level="h3" size="md" class="mb-4">
@@ -93,7 +128,7 @@
                             <flux:table.rows>
                                 <flux:table.row>
                                     <flux:table.cell variant="strong">
-                                        {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('d M Y') }}
+                                        {{ $booking->booking_date->format('d M Y') }}
                                     </flux:table.cell>
                                     <flux:table.cell variant="strong">{{ $booking->user?->name }}</flux:table.cell>
                                     <flux:table.cell

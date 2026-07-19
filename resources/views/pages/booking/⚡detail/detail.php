@@ -14,12 +14,13 @@ new class extends Component {
     public string $booking_status = '';
     public ?int $technician_id;
     public mixed $shipping_fee;
+
     public array $statuses = [
         'Menunggu',
         'Teknisi Ditugaskan',
         'Sedang Dikerjakan',
         'Selesai',
-        'Batal'
+        'Batal',
     ];
 
     // Complaint properties
@@ -32,11 +33,11 @@ new class extends Component {
     public function mount(Booking $booking): void
     {
         $this->booking = $booking->load([
-            'bookingItems.damageType.service', 
-            'user', 
-            'technician', 
-            'bookingEvents.changedBy', 
-            'complaints.user', 
+            'bookingItems.damageType.service',
+            'user',
+            'technician',
+            'bookingEvents.changedBy',
+            'complaints.user',
             'complaints.complainPhotos',
             'paymentProofs'
         ]);

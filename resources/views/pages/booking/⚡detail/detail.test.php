@@ -56,7 +56,7 @@ it('technician_id can be changed', function () {
 });
 
 it('booking_status can be changed', function () {
-    $user = \App\Models\User::factory()->create();
+    $user = \App\Models\User::factory()->create(['role' => 'admin']);
 
     Livewire::actingAs($user)
         ->test('pages::booking.create')
@@ -71,7 +71,19 @@ it('booking_status can be changed', function () {
 
     $booking = \App\Models\Booking::first();
 
-    Livewire::test('pages::booking.detail', compact('booking'))
+    // Transition through valid states: pending → assigned → on_progress → done
+    Livewire::actingAs($user)
+        ->test('pages::booking.detail', compact('booking'))
+        ->set('booking_status', 'Teknisi Ditugaskan')
+        ->assertSet('booking_status', 'Teknisi Ditugaskan');
+
+    Livewire::actingAs($user)
+        ->test('pages::booking.detail', compact('booking'))
+        ->set('booking_status', 'Sedang Dikerjakan')
+        ->assertSet('booking_status', 'Sedang Dikerjakan');
+
+    Livewire::actingAs($user)
+        ->test('pages::booking.detail', compact('booking'))
         ->set('booking_status', 'Selesai')
         ->assertSet('booking_status', 'Selesai');
 

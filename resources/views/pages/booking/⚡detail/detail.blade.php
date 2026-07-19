@@ -51,10 +51,10 @@
                     Jadwal
                 </x-ui.text>
                 <x-ui.heading level="h3" size="lg">
-                    {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('d M Y') }}
+                    {{ $booking->booking_date->format('d M Y') }}
                 </x-ui.heading>
                 <x-ui.text size="xs" class="text-gray-400">
-                    {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('H:i') }}
+                    {{ $booking->booking_date->format('H:i') }}
                 </x-ui.text>
             </div>
         </x-ui.card>
@@ -105,7 +105,7 @@
                 <div class="flex justify-between items-start">
                     <x-ui.text size="sm" class="text-gray-600">Jadwal</x-ui.text>
                     <x-ui.text size="sm" class="font-medium text-right">
-                        {{ Carbon\Carbon::createFromTimestamp($booking->booking_date)->format('d M Y H:i') }}
+                        {{ $booking->booking_date->format('d M Y H:i') }}
                     </x-ui.text>
                 </div>
 
@@ -221,22 +221,24 @@
         </x-ui.card>
     </div>
 
-    @if(auth()->user()->role === 'admin')
-        <div class="grid grid-cols-1 gap-4 relative z-10">
-            <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+    @if(in_array(auth()->user()->role, ['admin', 'technician']))
+        <div class="grid grid-cols-1 gap-4">
+            <x-ui.card size="lg" class="lg:col-span-2 !max-w-none [backdrop-filter:none]">
                 <x-ui.heading level="h3" size="md" class="mb-4">
                     Update Status
                 </x-ui.heading>
 
-                <x-ui.select
-                    wire:model.live="booking_status"
-                    placeholder="Pilih Status"
-                    clearable
-                >
-                    @foreach($statuses as $status)
-                        <x-ui.select.option value="{{$status}}">{{ $status }}</x-ui.select.option>
-                    @endforeach
-                </x-ui.select>
+                <div class="relative z-50">
+                    <x-ui.select
+                        wire:model.live="booking_status"
+                        placeholder="Pilih Status"
+                        clearable
+                    >
+                        @foreach($this->statuses as $status)
+                            <x-ui.select.option value="{{$status}}">{{ $status }}</x-ui.select.option>
+                        @endforeach
+                    </x-ui.select>
+                </div>
             </x-ui.card>
         </div>
     @endif
@@ -249,7 +251,7 @@
 
             <div class="space-y-4">
                 @foreach($booking->bookingEvents as $event)
-                    <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
+            <x-ui.card size="lg" class="lg:col-span-2 !max-w-none">
                         <div class="flex justify-between items-start">
                             <x-ui.text size="sm" class="text-gray-600">
                                 @if($event->status === 'created')
