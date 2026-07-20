@@ -62,13 +62,12 @@ class BookingForm extends Form
         }
 
         if ($this->photo) {
-            $file_name = $this->photo->getClientOriginalName();
-            $path = $this->photo->storeAs(path: 'booking', name: $file_name);
+            $path = $this->photo->store('booking', 'r2');
 
             BookingPhoto::create([
                 'booking_id' => $booking->id,
                 'path' => $path,
-                'original_name' => $file_name,
+                'original_name' => $this->photo->getClientOriginalName(),
             ]);
         }
 

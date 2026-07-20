@@ -332,7 +332,7 @@
                         @if($complaint->complainPhotos->count())
                             <div class="mt-3 flex gap-2">
                                 @foreach($complaint->complainPhotos as $photo)
-                                    <a href="{{ asset('storage/' . $photo->path) }}" target="_blank" class="text-sm text-blue-600 hover:underline">
+                                    <a href="{{ $this->r2Url($photo->path) }}" target="_blank" class="text-sm text-blue-600 hover:underline">
                                         Lihat Foto
                                     </a>
                                 @endforeach
@@ -395,7 +395,7 @@
                                 {{ ucfirst($proof->status) }}
                             </x-ui.badge>
                         </div>
-                        <a href="{{ asset('storage/' . $proof->path) }}" target="_blank" class="text-sm text-blue-600 hover:underline">
+                        <a href="{{ $this->r2Url($proof->path) }}" target="_blank" class="text-sm text-blue-600 hover:underline">
                             Lihat Bukti Pembayaran
                         </a>
                     </div>

@@ -30,6 +30,14 @@ new class extends Component {
     // Payment proof properties
     public $payment_proof;
 
+    public function r2Url(string $path): string
+    {
+        return \Illuminate\Support\Facades\Storage::disk('r2')->temporaryUrl(
+            $path,
+            now()->addHours(24),
+        );
+    }
+
     public function mount(Booking $booking): void
     {
         $this->booking = $booking->load([
@@ -129,17 +137,16 @@ new class extends Component {
             'booking_id' => $this->booking->id,
             'user_id' => auth()->id(),
             'message' => $this->complaint_message,
-            'status' => 'pending',
+            'status' => 'open',
         ]);
 
         if ($this->complaint_photo) {
-            $file_name = $this->complaint_photo->getClientOriginalName();
-            $path = $this->complaint_photo->storeAs(path: 'complaints', name: $file_name);
+            $path = $this->complaint_photo->store('complaints', 'r2');
 
             \App\Models\ComplainPhoto::create([
                 'complaint_id' => $complaint->id,
                 'path' => $path,
-                'original_name' => $file_name,
+                'original_name' => $this->complaint_photo->getClientOriginalName(),
             ]);
         }
 
@@ -159,13 +166,12 @@ new class extends Component {
             'payment_proof.max' => 'File maksimal 2MB',
         ]);
 
-        $file_name = $this->payment_proof->getClientOriginalName();
-        $path = $this->payment_proof->storeAs(path: 'payment_proofs', name: $file_name);
+        $path = $this->payment_proof->store('payment_proofs', 'r2');
 
         \App\Models\BookingPaymentProof::create([
             'booking_id' => $this->booking->id,
             'path' => $path,
-            'original_name' => $file_name,
+            'original_name' => $this->payment_proof->getClientOriginalName(),
             'status' => 'pending',
         ]);
 
